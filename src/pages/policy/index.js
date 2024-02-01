@@ -66,7 +66,7 @@ const navigate = useNavigate();
           </Card>
         </SoftBox>
       </SoftBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

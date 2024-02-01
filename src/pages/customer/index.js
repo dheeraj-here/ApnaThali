@@ -38,22 +38,23 @@ function Tables() {
     setshowCustomer(!showCustomer)
     setCustomerId(e)
   }
-
+// api/v1/get/customer/admin/${id}?search=${ev}
   const getCustomerList = (ev) =>{
+    console.log(id, "lc id");
     try {
       setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/api/v1/get/customer/admin/${id}?search=${ev}`, {
+      fetch(`${process.env.REACT_APP_API}/api/v1/get/all/User/${id}?.search=${ev}`, {
         method: "GET",
         headers: {
           Authorization: token
         }
       }).then((res) => res.json())
         .then((result) => {
-         console.log(result)
+         console.log(result, "result of cust...")
           if (result.success) {
             setTotalPage(result.data?.totalPage);
             setLoading(false);
-            setCounts(result.counts);
+            setCounts(result.data.length);
             setData(customerData({
               data: result?.data,
               view: handleViewCustomer
@@ -139,7 +140,7 @@ function Tables() {
           </Card>
         </SoftBox>
       </SoftBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

@@ -55,7 +55,9 @@ function Tables() {
 
   }
 
-  const deleteMachine = (ev) => {
+  const deleteMachine = (ev, connect) => {
+    console.log(connect, "del mc");
+    if(!connect){
     try {
 
         fetch(`${process.env.REACT_APP_API}/api/v1/delete/machine/${ev}`, {
@@ -75,6 +77,10 @@ function Tables() {
     } catch (error) {
         toast.error(error.message)
     }
+  }
+  else{
+    toast.error("Mahcine is connected")
+  }
 }
 
   const handledisconnect = async (e) => {
@@ -210,7 +216,7 @@ function Tables() {
         </SoftBox>
       </SoftBox>
 
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

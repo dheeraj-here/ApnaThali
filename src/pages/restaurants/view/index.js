@@ -64,7 +64,7 @@ const index = ({ show, unShow, id, dep }) => {
       setLoading(true);
 
       setProfilesListData([]);
-      
+
       fetch(`${process.env.REACT_APP_API}/api/v1/get/Restaurant/detail/${id}`, {
         method: "GET",
         headers: {
@@ -80,7 +80,7 @@ const index = ({ show, unShow, id, dep }) => {
             result?.members && result?.members.length > 0 &&
               result?.members.map((elm, key) => {
                 // console.log("dsertg", elm?.photo);
-                
+
                 setProfilesListData((prev) => [...prev, {
                   image: elm?.photo ? `${process.env.REACT_APP_IMG}/${elm?.photo}` : avatar,
                   name: elm?.name,
@@ -119,7 +119,7 @@ const index = ({ show, unShow, id, dep }) => {
   // console.log(profilesListData, "123456")
   return (
     <div>
-      <BasicModal show={show} unShow={unShow} width={800} height="70vh">
+      <BasicModal show={show} unShow={unShow} height="70vh">
         <SoftBox mt={2}>
           <AppBar position="static">
             <Tabs
@@ -150,8 +150,8 @@ const index = ({ show, unShow, id, dep }) => {
                   backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
                   boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
                   position: "relative",
-                  mt: 2,
-                  mx: 3,
+                  // mt: 2,
+                  // mx: 3,
                   py: 2,
                   px: 2,
                 }}
@@ -160,7 +160,7 @@ const index = ({ show, unShow, id, dep }) => {
                 <Grid container spacing={3} alignItems="center">
                   <Grid item>
                     <SoftAvatar
-                      src={data[0]?.logo ? `${process.env.REACT_APP_IMG}${data[0]?.logo}` : avatar}
+                      src={data[0]?.logo ? `${process.env.REACT_APP_IMG}/${data[0]?.logo}` : avatar}
                       alt="profile-image"
                       variant="rounded"
                       size="xl"
@@ -184,7 +184,11 @@ const index = ({ show, unShow, id, dep }) => {
 
                   </Grid>
 
-                  <SoftBox sx={{ ml: 24 }}>
+                  <SoftBox sx={{
+                    ml: { xs: 4, md: 24 },  // 0 margin on extra-small (xs) screens, 24 margin on medium (md) and larger screens
+                    mt: { xs: 2, md: 0 },   // 2 margin on extra-small (xs) screens, 0 margin on medium (md) and larger screens
+
+                  }}>
                     <SoftTypography variant="h5" fontWeight="medium">
                       Disable
                     </SoftTypography>
@@ -199,7 +203,7 @@ const index = ({ show, unShow, id, dep }) => {
                   boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
                   position: "relative",
                   mt: 2,
-                  mx: 3,
+                  // mx: 3,
                   py: 2,
                   px: 2,
                 }}
@@ -208,7 +212,7 @@ const index = ({ show, unShow, id, dep }) => {
                 <Grid container spacing={3} alignItems="center">
                   <Grid item>
                     <SoftAvatar
-                      src={data[0]?.userId?.userImage ? `${process.env.REACT_APP_IMG}${data[0]?.userId?.userImage}` : avatar}
+                      src={data[0]?.userId?.userImage ? `${process.env.REACT_APP_IMG}/${data[0]?.userId?.userImage}` : avatar}
                       alt="profile-image"
                       variant="rounded"
                       size="xl"
@@ -266,18 +270,17 @@ const index = ({ show, unShow, id, dep }) => {
             <TabPanel value={value} index={1} dir={theme.direction}>
               {profilesListData.length > 0 ?
                 <ProfilesList title="All Shallow Members" profiles={profilesListData} />
-                : <SoftBox sx={{ ml: 24 }}>
-                  <img src={nodata} width={300} sx={{ ml: 20 }} alt="" />
+                : <SoftBox >
+                  <img src={nodata} width='100%' style={{maxWidth:"300px", marginLeft: 'auto',marginRight: 'auto', display:'block' }} alt="" />
                 </SoftBox>
               }
             </TabPanel>
             <TabPanel value={value} index={2} dir={theme.direction}>
               {profilesListData.length > 0 ?
                 <ProfilesList title="Plans" profiles={attendListData} />
-                : <SoftBox sx={{ ml: 24 }}>
-                  <img src={nodata} width={300} sx={{ ml: 20 }} alt="" />
+                : <SoftBox >
+                  <img src={nodata} width='100%' style={{maxWidth:"300px", marginLeft: 'auto',marginRight: 'auto', display:'block' }} alt="" />
                 </SoftBox>}
-
             </TabPanel>
           </SwipeableViews>
         </SoftBox>
@@ -299,7 +302,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: { xs: 0, md: 3 } }}>
           <Typography>{children}</Typography>
         </Box>
       )}

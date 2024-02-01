@@ -14,13 +14,13 @@ const tableData = {
     { name: "function", align: "left" },
     { name: "status", align: "center" },
     { name: "shallow", align: "center" },
-    { name: "action", align: "center" },
   ],
 
   rows: [],
 };
 
    data&&data.length>0&&data.map((elm,i)=>{
+    console.log(elm,"cghj");
      tableData.rows.push( {
       author: (<SoftBox display="flex" alignItems="center" px={1} py={0.5} key={i}>
         <SoftBox mr={2}>
@@ -51,11 +51,11 @@ const tableData = {
             {elm?.shallowMember}
         </SoftTypography>
       ),
-      action: (
-        <Icon fontSize="small" color="inherit" onClick={()=>view(elm?._id)}>
-        visibility
-      </Icon>
-      ),
+      // action: (
+      //   <Icon fontSize="small" color="inherit" onClick={()=>view(elm?._id)}>
+      //   visibility
+      // </Icon>
+      // ),
     })
    })
   return tableData

@@ -18,11 +18,12 @@ export default function BasicModal({
   NoBackDropClose,
 }) {
   const style = {
-    position: "absolute",
+    position: "relative",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: width ? width : 400,
+    width: "90%",
+    maxWidth: 800,
     height: height,
     overflowY: overflowY ? "scroll" : "auto",
     bgcolor: "#f3f3f3",
@@ -30,6 +31,25 @@ export default function BasicModal({
     boxShadow: 24,
     borderRadius: 8,
     p: 4,
+  };
+
+  const upperStyle = {
+    // top: "50%",
+    // left: "50%",
+    // transform: "translate(-50%, -50%)",
+    // width: "90%",
+    // maxWidth: 800,
+    // height: height,
+  }
+
+  const iconStyle = {
+    justifyContent: "flex-end",
+    position: "fixed",
+    zIndex: 777777,
+    top: "4px",
+    right: "7px",
+    width: width ? width : 400,
+    overflowY: "auto"
   };
   return (
     <div>
@@ -45,35 +65,30 @@ export default function BasicModal({
           left: "50%",
           transform: "translate(-50%, -50%)",
           height: height,
+
           backgroundColor: "black",
         }}>
        
        
         </SoftBox> */}
+
         <SoftBox sx={style}>
-        <IconButton
+          <IconButton
             onClick={() => unShow(false)}
             color="error"
+            sx={iconStyle}
             component="div"
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              position: "sticky",
-              zIndex: 777777,
-              position: "absolute",
-              top: "4px",
-              right: "7px",
-              width: width ? width : 400,
-              backgroundcolor: "#fff",
-            }}
             size="large"
           >
             <CancelPresentationIcon />
           </IconButton>
-          {children}
+          
+          <SoftBox>
+            {children}
+          </SoftBox>
         </SoftBox>
       </Modal>
-    </div>
+    </div >
   );
 }
 BasicModal.propTypes = {

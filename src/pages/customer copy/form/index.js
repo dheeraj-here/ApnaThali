@@ -50,6 +50,7 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                 body: formData
             }).then((res) => res.json())
                 .then((result) => {
+                    console.log(result, "this is result");
                     if (result.success) {
                         toast.success(result.message);
                         unShow();

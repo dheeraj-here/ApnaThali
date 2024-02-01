@@ -123,7 +123,7 @@ function Dashboard() {
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={3}>
+            <Grid item xs={12} sm={6} xl={2}>
               {
                 loading ? <Skeleton variant="rounded" style={{ borderRadius: "12px" }} width={280} height={80} /> :
                   <MiniStatisticsCard
@@ -251,7 +251,7 @@ function Dashboard() {
           </Grid>
         </Grid>
       </SoftBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

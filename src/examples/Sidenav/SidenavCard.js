@@ -59,7 +59,7 @@ function SidenavCard() {
               Please check our docs
             </SoftTypography>
           </SoftBox> */}
-          <SoftButton
+          {/* <SoftButton
             component={Link}
             href="https://www.creative-tim.com/learning-lab/react/quick-start/soft-ui-dashboard/"
             target="_blank"
@@ -69,7 +69,7 @@ function SidenavCard() {
             fullWidth
           >
             Enjoy your thali
-          </SoftButton>
+          </SoftButton> */}
         </SoftBox>
       </CardContent>
     </Card>

@@ -3,7 +3,7 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
 import SoftBadge from "components/SoftBadge";
-import team2 from "assets/images/team-2.jpg";
+import machine from "assets/images/machine.png";
 import Icon from "@mui/material/Icon";
 import { Button } from "@mui/material";
 import ConnectRestro from "../../machines/form"
@@ -30,7 +30,7 @@ export function CustomerData({ data, connect, disconnect, deleto }) {
     tableData.rows.push({
       machine: (<SoftBox display="flex" alignItems="center" px={1} py={0.5} key={i}>
         <SoftBox mr={2}>
-          <SoftAvatar src={elm?.photo ? `${process.env.REACT_APP_IMG}/${elm?.photo}` : team2} alt={elm?.title} size="sm" variant="rounded" />
+          <SoftAvatar src={elm?.photo ? `${process.env.REACT_APP_IMG}/${elm?.photo}` : machine} alt={elm?.title} size="sm" variant="rounded" />
         </SoftBox>
         <SoftBox display="flex" flexDirection="column">
           <SoftTypography variant="button" fontWeight="medium">
@@ -89,7 +89,7 @@ export function CustomerData({ data, connect, disconnect, deleto }) {
         </SoftBox>
       ),
       delete: (
-        <Icon fontSize="small" style={{ cursor: "pointer" }} color="inherit" onClick={() => deleto(elm?._id)}>
+        <Icon fontSize="small" style={{ cursor: "pointer" }} color="inherit" onClick={() => deleto(elm?._id, elm.connect)}>
           delete
         </Icon>
       ),

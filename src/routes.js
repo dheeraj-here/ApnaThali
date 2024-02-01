@@ -12,8 +12,12 @@ import CustomerSupport from "examples/Icons/CustomerSupport";
 import CreditCard from "examples/Icons/CreditCard";
 import Help from "pages/helps"
 import Cube from "examples/Icons/Cube";
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import { FoodBankOutlined, MoneyRounded } from "@mui/icons-material";
 import Policy from "pages/policy";
+import AdfScannerOutlinedIcon from '@mui/icons-material/AdfScannerOutlined';
+import PolicyOutlinedIcon from '@mui/icons-material/PolicyOutlined';
 import Expense from "pages/customer copy";
 import Machine from "pages/machines"
 import Helps from "examples/Icons/Help"
@@ -35,7 +39,7 @@ const routes = [
     name: "Customers",
     key: "customers",
     route: "/customers",
-    icon: <CustomerSupport size="12px" />,
+    icon: <PersonOutlineOutlinedIcon size="12px" />,
     component: <Customer />,
     noCollapse: true,
   },
@@ -70,9 +74,9 @@ const routes = [
   {
     type: "collapse",
     name: "Machines",
-    key: "machine",
+    key: "machines",
     route: "/machines",
-    icon: <FoodBankOutlined size="12px" />,
+    icon: <AdfScannerOutlinedIcon size="12px" />,
     component: <Machine />,
     noCollapse: true,
   },
@@ -81,19 +85,19 @@ const routes = [
     name: "Notification",
     key: "notification",
     route: "/notification",
-    icon: <FoodBankOutlined size="12px" />,
+    icon: <NotificationsNoneOutlinedIcon size="12px" />,
     component: <Notification />,
     noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "Whatsapp",
-    key: "whatsapp",
-    route: "/whatsapp",
-    icon: <FoodBankOutlined size="12px" />,
-    component: <Whatsapp />,
-    noCollapse: true,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Whatsapp",
+  //   key: "whatsapp",
+  //   route: "/whatsapp",
+  //   icon: <MoneyRounded size="12px" />,
+  //   component: <Whatsapp />,
+  //   noCollapse: true,
+  // },
 
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
@@ -101,7 +105,7 @@ const routes = [
     name: "Policy",
     key: "policy",
     route: "/policy",
-    icon: <CustomerSupport size="12px" />,
+    icon: <PolicyOutlinedIcon size="12px" />,
     component: <Policy />,
     noCollapse: true,
   },

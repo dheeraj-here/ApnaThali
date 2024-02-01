@@ -6,7 +6,9 @@ import SoftBadge from "components/SoftBadge";
 import team4 from "assets/images/logos/restaurant.png";
 import Icon from "@mui/material/Icon";
 import avatar from "assets/images/cust-avatar.jpg"
-export function CustomerData({ data, view }) {
+import SoftButton from "components/SoftButton";
+
+export function CustomerData({ data, view, downloadQR }) {
 
   const tableData = {
     columns: [
@@ -16,13 +18,14 @@ export function CustomerData({ data, view }) {
       { name: "status", align: "center" },
       { name: "time", align: "center" },
       { name: "action", align: "center" },
+      { name: "download", align: "center"}
     ],
 
     rows: [],
   };
 
   data && data.length > 0 && data.map((elm, i) => {
-    // console.log("This is LOGO", elm);
+    console.log("This is restaurent : ", elm);
     tableData.rows.push({
       id: (
         <SoftTypography variant="caption" fontWeight="large" color="text">
@@ -47,9 +50,8 @@ export function CustomerData({ data, view }) {
           <SoftTypography variant="caption" fontWeight="medium" color="text">
             {`phone : ${elm?.contact}`}
           </SoftTypography>
-          <SoftTypography variant="caption" color="secondary">
-            {/* restaurant: {elm?.upiId} */}
-            restaurent: dfghjk
+          <SoftTypography variant="caption" color="secondary" width="120px">
+            restaurant: {elm?.upiId}
           </SoftTypography>
         </SoftBox>
       ),
@@ -59,19 +61,28 @@ export function CustomerData({ data, view }) {
       time: (
         <SoftBox display="flex" flexDirection="column">
           <SoftTypography variant="caption" fontWeight="medium" color="text">
-            Open: {elm?.openTime}
+            Open: 23:00 PM
           </SoftTypography>
           <SoftTypography variant="caption" color="secondary">
-            Close: {elm?.closeTime}
+            Close: 12:00 AM
           </SoftTypography>
         </SoftBox>
 
       ),
       action: (
-        <Icon fontSize="small" color="inherit" onClick={() => view(elm?._id)}>
+        <Icon fontSize="small" color="inherit" style={{ cursor: 'pointer' }} onClick={() => view(elm._id)}>
           visibility
         </Icon>
       ),
+      download: (
+        <SoftButton
+                size="small"
+                color="black"
+                onClick={() => downloadQR(elm._id)}
+              >
+                download qr
+              </SoftButton>
+      )
     })
   })
   return tableData

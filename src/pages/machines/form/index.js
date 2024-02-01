@@ -70,6 +70,7 @@ const index = ({ show, unShow, data, handleRefresh }) => {
                     toast.success(result.message);
                     // console.log(result.message, "grgirjri");
                     unShow();
+                    setMno('')
                     handleRefresh();
                 } else {
                     toast.error(result.message);
@@ -86,19 +87,13 @@ const index = ({ show, unShow, data, handleRefresh }) => {
         }
     }
     const onChange = (e) => {
-        // const name = e.target.name;
-        // if (e.target.files) {
-        //     if (e.target.files?.length > 1) {
-        //         setValues({ ...values, [name]: [...e.target.files] });
-        //     } else {
-        //         setValues({ ...values, [name]: e.target.files[0] });
-        //     }
-        // } else {
-        //     const value = e.target.value;
-        //     setValues({ ...values, [name]: value });
-        // }
-        setMno(e.target.value)
-        console.log(e.target.value);
+        const name = e.target.name;
+    const value = e.target.value;
+
+    // Validate that the entered value contains only numeric characters
+    if (/^\d*$/.test(value) || value === "") {
+        setMno(value);
+    }
     };
 
     return (
@@ -120,34 +115,19 @@ const index = ({ show, unShow, data, handleRefresh }) => {
                     >
                         <SoftBox m={1}>
                             <SoftInput
-                                type={number}
+                                type="text"
                                 name="mid"
                                 placeholder="Enter Machine No."
                                 icon={{ component: "mno", direction: "left" }}
                                 onChange={onChange}
                                 value={mno}
+                                inputProps={{
+                                    maxLength: 10,
+                                    pattern: "\\d*",  // Allow only digits
+                                }}
+                            
                             />
                         </SoftBox>
-                        {/* <SoftBox m={1}>
-                            <SoftInput
-                                name="key"
-                                placeholder="Enter Key"
-                                icon={{ component: "key", direction: "left" }}
-                                onChange={onChange}
-                                value={values.key}
-                            />
-                        </SoftBox> */}
-                        {/* <SoftBox m={1}>
-                            <SoftInput
-                                name="amount"
-                                type="number"
-                                value={values.amount}
-                                placeholder="Enter Amount"
-                                icon={{ component: "paid", direction: "left" }}
-                                onChange={onChange}
-                            />
-                        </SoftBox> */}
-                        {/* <Uploader name="photo" multiple={false} images={values.photo} onChange={onChange} /> */}
                         <SoftButton
                             type="submit"
                             size="small"

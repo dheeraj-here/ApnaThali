@@ -18,6 +18,14 @@ const index = () => {
     const [n, setN] = useState(0)
     const [refresh, setRefresh] = useState(0);
     const options = ['Restaurents', 'Members']
+    const [mess, setMess] = useState([
+        {
+            message: ''
+        },
+        {
+            message: ''
+        }
+    ])
     const [inputFields, setInputFields] = useState([
         {
             name: 'desc-0',
@@ -67,9 +75,30 @@ const index = () => {
         setInputFields(newInputFields);
     }
 
+    const onChangeMessage = (index, value) => {
+        console.log(index, value.target.value, '12345');
+        if (index === 0) {
+            setMess((prev) => [
+                {
+                    message: value.target.value,
+                },
+                ...prev.slice(1)
+            ])
+        }
+        else {
+            setMess((prev) => [
+                ...prev.slice(0, 1),
+                {
+                    message: value.target.value
+                }
+            ])
+        }
+    }
+
     const onChange = (index, value) => {
+        // console.log(index, value.target.value, '123456');
         const newInputFields = [...inputFields];
-        newInputFields[index].value = value;
+        newInputFields[index].value = value.target.value;
         setInputFields(newInputFields);
     };
     const send = () => {
@@ -139,29 +168,35 @@ const index = () => {
                             Send to a number
                         </SoftBox>
                         <SoftBox m={1}>
+
                             <SoftInput
-                                name="title"
+                                index={0}
+                                name="message"
                                 placeholder="Write message..."
                                 icon={{ component: "message", direction: "left" }}
-                                onChange={onChange}
-                                value={values.title}
+                                onChange={(value) => onChangeMessage(0, value)}
+                                value={mess[0].message}
                             />
                         </SoftBox>
-                        {inputFields.map((field, index) => (
-                            <SoftBox key={index} m={1}>
-                                <SoftInput
-                                    name={`desc-${index}`}
-                                    placeholder="Enter No."
-                                    icon={{ component: "phone", direction: "left" }}
-                                    onChange={(value) => onChange(index, value)}
-                                    value={field.value}
-                                />
-                                <RemoveCircleOutlineIcon fontSize='large' onClick={removePhoneBox(index)} />
+                        <SoftBox display='flex' flexWrap='wrap'>
+                            {inputFields.map((field, index) => (
+                                <SoftBox key={index} m={1} display="flex" flexBasis="45%">
+                                    <SoftInput
+                                        name={`desc-${index}`}
+                                        placeholder="Enter No."
+                                        icon={{ component: "phone", direction: "left" }}
+                                        onChange={(value) => onChange(index, value)}
+                                        value={field.value}
+                                    />
+                                    {index > 0 && (
+                                        <RemoveCircleOutlineIcon cursor="pointer" fontSize='large' onClick={() => removePhoneBox(index)} />
+                                    )}
 
-                            </SoftBox>
-                        ))}
+                                </SoftBox>
+                            ))}
+                        </SoftBox>
                         <SoftBox mt={2} sx={{ mx: 'auto' }}>
-                            <AddCircleOutlineIcon fontSize='large' onClick={addPhoneBox} />
+                            <AddCircleOutlineIcon cursor="pointer" fontSize='large' onClick={addPhoneBox} />
                         </SoftBox>
                         <SoftButton
                             type="submit"
@@ -211,11 +246,12 @@ const index = () => {
                         </SoftBox>
                         <SoftBox m={1}>
                             <SoftInput
-                                name="title"
+                                index={1}
+                                name="message"
                                 placeholder="Write message..."
                                 icon={{ component: "message", direction: "left" }}
-                                onChange={onChange}
-                                value={values.title}
+                                onChange={(value) => onChangeMessage(1, value)}
+                                value={mess[1].message}
                             />
                         </SoftBox>
                         <SoftBox px="10px" mb={2}>

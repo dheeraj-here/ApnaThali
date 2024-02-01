@@ -22,6 +22,7 @@ import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
 import burceMars from "assets/images/bruce-mars.jpg";
 import Switch from '@mui/material/Switch';
+import expense from "assets/images/expense.png"
 
 
 const index = ({ show, unShow, data }) => {
@@ -29,7 +30,7 @@ const index = ({ show, unShow, data }) => {
 
   return (
     <div>
-      <BasicModal show={show} unShow={unShow} width={800} height="70vh">
+      <BasicModal show={show} unShow={unShow} height="70vh">
         <SoftBox mt={2}>
 
           <Card
@@ -40,21 +41,20 @@ const index = ({ show, unShow, data }) => {
               position: "relative",
               mt: 2,
               mx: 3,
-              py: 2,
-              px: 2,
+              // py: 2,
+              // px: 2,
             }}
           >
 
             <SoftTypography variant="h3" color="text" fontWeight="large">
               Expense Amount :  {data?.amount}
             </SoftTypography>
-            <Grid container spacing={3} alignItems="center">
+            <Grid container spacing={{xs:3, md:30}} alignItems="center">
               <Grid item>
-                <img src={`${process.env.REACT_APP_IMG}/${data?.photo}`}  width={300} height={300}/>
-             
+                <img src={data?.photo ? `${process.env.REACT_APP_IMG}/${data?.photo}` : expense} width='90%'  style={{maxWidth:'200px'}}/>
               </Grid>
               <Grid item>
-                <SoftBox height="100%" mt={0.5} lineHeight={1}>
+                <SoftBox height="100%" mt={0.5} style={{ marginLeft: "10px", display:'block'}} lineHeight={1}>
                   <SoftTypography variant="h5" fontWeight="medium">
                     Title:   {data?.title}
                   </SoftTypography>
@@ -62,16 +62,11 @@ const index = ({ show, unShow, data }) => {
                     Description:  {data?.description}
                   </SoftTypography><br></br>
                   <br></br>
-
                 </SoftBox>
               </Grid>
 
             </Grid>
           </Card>
-
-
-
-
         </SoftBox>
       </BasicModal>
     </div>
@@ -91,7 +86,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 0 }}>
           <Typography>{children}</Typography>
         </Box>
       )}

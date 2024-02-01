@@ -1,5 +1,11 @@
 
 import { useState, useEffect, useMemo } from "react";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebase";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
 // react-router components
 import { Routes, Route, Navigate, useLocation ,useNavigate } from "react-router-dom";

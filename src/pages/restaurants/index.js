@@ -13,7 +13,11 @@ import toast from "react-hot-toast";
 import customerData from './data/authorsTableData';
 import Loading from "components/ApnaLoading";
 import ViewCustomer from "./view";
-
+import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
+import SoftButton from "components/SoftButton";
+import { UseSelector } from "react-redux/es/hooks/useSelector";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 
 function Tables() {
 
@@ -26,45 +30,113 @@ function Tables() {
   const [showCustomer, setshowCustomer] = useState(false);
   const [customerId, setCustomerId] = useState('');
   const [c, setC] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+  const [result, setResult] = useState(null);
+  const search = useSelector((state)=>state.searchSlice.search);
 
-  const handleViewCustomer = (e) =>{
-    setC(c+1)
+
+
+  const handlePageChange = (newPage) => {
+    console.log(newPage);
+    setCurrentPage(newPage);
+  };
+
+  const totalPages = Math.ceil(result?.data.length / itemsPerPage);
+
+
+  const renderPaginationControls = () => (
+    <SoftBox>
+      <SoftButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+        <ArrowBackIosNewOutlinedIcon />
+      </SoftButton>
+      <span>{currentPage}</span>
+      <SoftButton onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+        <ArrowForwardIosOutlinedIcon />
+      </SoftButton>
+    </SoftBox>
+  );
+
+
+  const handleViewCustomer = (e) => {
+    setC(c + 1)
     setshowCustomer(!showCustomer)
     setCustomerId(e)
   }
 
-  useEffect(() => {
+  const downloadQR = async (e) => {
+    console.log("Download", e);
+    try {
+      // setLoading(true);
+      const res = await fetch(`${process.env.REACT_APP_APE}/api/v1/get/Restaurant/qrCode/${e}`, {
+        method: "GET",
+        redirect: "follow",
+        headers: {
+          Authorization: token
+        }
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`)
+      }
+      const result = await res.json();
+      console.log(result, "eryhg");
+
+      if (result.success) {
+        console.log(result, "THis is result");
+        const url = `${process.env.REACT_APP_APE}/${result?.data.pdf}`;
+        console.log(url);
+        console.log(url);
+        window.open(url, "_blank");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message)
+    }
+  }
+
+  const getRestro = (ev) => {
     try {
       setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/api/v1/get/admin/Restaurant/${id}`, {
+      fetch(`${process.env.REACT_APP_API}/api/v1/get/admin/Restaurant/${id}?search=${search}`, {
         method: "GET",
         headers: {
           Authorization: token
         }
       }).then((res) => res.json())
         .then((result) => {
-
           if (result.success) {
-            setLoading(false);
-           setCounts(result.counts);
-           setData(customerData({
-             data:result?.data,
-            view:handleViewCustomer
-           }));
-          //  console.log(result?.data, "This is our data for row/col");
+            setResult(result)
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const slicedData = customerData({
+              data: result?.data.slice(startIdx, endIdx),
+              view: handleViewCustomer,
+              downloadQR: downloadQR
+            });
+            setCounts(result.counts);
+            setData(slicedData);
+            setLoading(false)
+            //  console.log(result?.data, "This is our data for row/col");
           }
         })
+
     } catch (error) {
       toast.error(error.message)
     }
-  }, [id]);
+  }
+
+  useEffect(() => {
+    if(location.pathname=='/restaurants'){
+      getRestro(search)
+    }  }, [id, currentPage, search])
 
 
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <ViewCustomer show={showCustomer} unShow={setshowCustomer} id={customerId} dep={c}/>
+      <ViewCustomer show={showCustomer} unShow={setshowCustomer} id={customerId} dep={c} />
       <SoftBox py={3}>
         <SoftBox mb={3}>
           {/* <SoftBox mb={3}>
@@ -117,12 +189,15 @@ function Tables() {
                 },
               }}
             >
-           {loading ?<Loading/>:   <Table columns={columns} rows={rows} />}
+              {loading ? <Loading /> : <Table columns={columns} rows={rows} />}
+            </SoftBox>
+            <SoftBox py={2} mx='auto'>
+              {renderPaginationControls()}
             </SoftBox>
           </Card>
         </SoftBox>
       </SoftBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

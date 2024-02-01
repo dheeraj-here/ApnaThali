@@ -10,6 +10,7 @@ import SoftTypography from "components/SoftTypography";
 import Table from "examples/Tables/Table";
 import { useEffect } from "react";
 import SoftProgress from "components/SoftProgress";
+import Restro from 'assets/images/logos/restaurant.png'
 function Projects({data}) {
  
   const [columns, setcolumns] = useState([{ name: "companies", align: "left" },
@@ -19,12 +20,13 @@ function Projects({data}) {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    data&&data.length>0&&data.map((elm)=>{
+    data&&data.length>0&&data.map((elm, index)=>{
+      console.log(elm, "we got elm in db", index);
        setRows(prev=>[...prev,{
-        companies: [elm?.logo?`${process.env.REACT_APP_IMG}${elm?.logo}`:logoXD, elm?.name],
+        companies: [elm?.logo?`${process.env.REACT_APP_IMG}/${elm?.logo}`:Restro, elm?.name],
         detail: (
           <SoftTypography variant="caption" color="text" fontWeight="medium">
-           {elm?.phone}<br/>
+           {elm?.contact}<br/>
            {elm?.email}
           </SoftTypography>
         ),

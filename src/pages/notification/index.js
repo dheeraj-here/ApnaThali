@@ -14,19 +14,34 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 const index = () => {
 
     const [refresh, setRefresh] = useState(0);
-    const options = ['Restaurents', 'Members']
-    const [selectedValue, setSelectedValue] = useState('')
+    const options = ['users', 'members', 'all']
+    const op = ['PUSH', 'APP', 'BOTH']
+    // const [selectedValue, setSelectedValue] = useState('')
 
     const handleRefresh = () => setRefresh(refresh + 1);
     const [values, setValues] = useState({
         title: "",
         description: "",
+        link: '',
         icon: "",
+        selectedValue: '',
+        op: ''
     });
 
     const handleDropdownChange = (event) => {
-        setSelectedValue(event.target.value)
-        console.log(event.target.value,);
+        const selectedValue = event.target.value;
+        setValues({
+            ...values,
+            selectedValue: selectedValue
+        })
+    };
+
+    const handleDropdownChange2 = (event) => {
+        const op = event.target.value;
+        setValues({
+            ...values,
+            op: op
+        })
     };
 
     // useEffect(() => {
@@ -45,28 +60,34 @@ const index = () => {
 
     const send = () => {
         try {
-            const { title, description, icon } = values;
+            console.log('send starts');
+            const { title, description, link, icon, selectedValue, op } = values;
 
             const formData = new FormData();
-            typeof (values.photo) == 'object' && formData.append('photo', photo);
+            typeof (values.icon) == 'object' && formData.append('icon', icon);
+            formData.append("send", op);
             formData.append('title', title);
+            formData.append('link', link)
+            formData.append('type', selectedValue);
             formData.append('description', description);
-            formData.append('icon', icon);
 
-            fetch( `${process.env.REACT_APP_API}/api/v1/create/expense/${id}`, {
+            fetch(`${process.env.REACT_APP_API}/api/v1/send/notification`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
                     Authorization: token
                 },
-                body: formData
+                body: formData,
+                redirect: 'follow'
             }).then((res) => res.json())
                 .then((result) => {
+                    console.log(result, "this is result...");
                     if (result.success) {
-                        toast.success(result.message);
+                        toast.success("Message sent successfully!");
+                        console.log(title, selectedValue, icon, description, "qwerty");
                         handleRefresh()
                     } else {
-                        toast.error(result.message)
+                        toast.error("Message not sent!")
                     }
                 })
         } catch (error) {
@@ -74,6 +95,7 @@ const index = () => {
         }
     }
     const onChange = (e) => {
+        console.log(e.target.value, '4567');
         const name = e.target.name;
         if (e.target.files) {
             if (e.target.files?.length > 1) {
@@ -91,7 +113,10 @@ const index = () => {
         setValues({
             title: "",
             description: "",
+            link: "",
             icon: "",
+            selectedValue: '',
+            op: ''
         });
     }, [refresh])
 
@@ -134,37 +159,65 @@ const index = () => {
                         </SoftBox>
                         <SoftBox m={1}>
                             <SoftInput
-                                name="icon"
-                                value={values.icon}
-                                placeholder="Icon" 
-                                icon={{ component: "icon", direction: "left" }}
+                                name="link"
+                                placeholder="Paste link"
+                                icon={{ component: "link", direction: "left" }}
                                 onChange={onChange}
+                                value={values.link}
                             />
                         </SoftBox>
+                        <Uploader name="icon" multiple={false} images={values.icon} onChange={onChange} />
                         <SoftBox px="10px" mb={2}>
-                            <select
-                                id="dynamicDropdown"
-                                value={selectedValue}
-                                onChange={handleDropdownChange}
-                                style={{
-                                    padding: '8px',
-                                    fontSize: '16px',
-                                    width: '200px',
-                                    borderRadius: '4px',
-                                    border: '1px solid #ccc',
-                                }}
-                            >
-                                <option value="" disabled>
-                                    Select the receiver
-                                </option>
-                                {options.map((option) => (
-                                    <option key={option.length} value={option}>
-                                        {option}
+                            <SoftBox mb={2}>
+                                <select
+                                    id="dynamicDropdown"
+                                    value={values.selectedValue}
+                                    onChange={handleDropdownChange}
+                                    style={{
+                                        padding: '8px',
+                                        fontSize: '16px',
+                                        width: '200px',
+                                        borderRadius: '4px',
+                                        border: '1px solid #ccc',
+                                    }}
+                                >w
+                                    <option value="" disabled>
+                                        Select the receiver
                                     </option>
+                                    {options.map((option) => (
+                                        <option key={option.length} value={option}>
+                                            {option}
+                                        </option>
 
-                                ))}
-                            </select>
-                        </SoftBox>                        <SoftButton
+                                    ))}
+                                </select>
+                            </SoftBox>
+                            <SoftBox mb={2}>
+                                <select
+                                    id="dynamicDropdown"
+                                    value={values.op}
+                                    onChange={handleDropdownChange2}
+                                    style={{
+                                        padding: '8px',
+                                        fontSize: '16px',
+                                        width: '200px',
+                                        borderRadius: '4px',
+                                        border: '1px solid #ccc',
+                                    }}
+                                >w
+                                    <option value="" disabled>
+                                        Select
+                                    </option>
+                                    {op.map((op) => (
+                                        <option key={op.length} value={op}>
+                                            {op}
+                                        </option>
+
+                                    ))}
+                                </select>
+                            </SoftBox>
+                        </SoftBox>
+                        <SoftButton
                             type="submit"
                             size="small"
                             color="black"
