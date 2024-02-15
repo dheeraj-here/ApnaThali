@@ -26,7 +26,7 @@ import expense from "assets/images/expense.png"
 
 
 const index = ({ show, unShow, data }) => {
-
+console.log(data, "exprense data");
 
   return (
     <div>

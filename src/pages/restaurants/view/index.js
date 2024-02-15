@@ -26,20 +26,21 @@ import avatar from 'assets/images/cust-avatar.jpg'
 import nodata from 'assets/images/no-data.png'
 import { CenterFocusStrong, Image } from '@mui/icons-material';
 
-const index = ({ show, unShow, id, dep }) => {
+const index = ({ show, unShow, data, dep }) => {
 
-  const [data, setData] = useState('');
+  // const [data, setData] = useState('');
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [profilesListData, setProfilesListData] = useState([]);
   const [attendListData, setAttendListData] = useState([]);
+  const [plan, setPlan] = useState([]);
 
   const [time, setTime] = useState('')
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  // console.log(id, "Id inside useeffect");
+  console.log(data, "Data of this res..");
 
   const handleChangeIndex = (index) => {
     setValue(index);
@@ -60,61 +61,64 @@ const index = ({ show, unShow, id, dep }) => {
 
   useEffect(() => {
 
-    try {
-      setLoading(true);
+    setPlan([])
+    setPlan(data.plans)
+    // try {
+    //   setLoading(true);
 
-      setProfilesListData([]);
+    //   setProfilesListData([]);
 
-      fetch(`${process.env.REACT_APP_API}/api/v1/get/Restaurant/detail/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: token
-        }
-      }).then((res) => res.json())
-        .then((result) => {
-          console.log(result, '234567');
-          if (result.success) {
-            setLoading(false);
-            setData(result?.data, "We got profile data");
-            setTime(result?.averageEatingTime)
-            result?.members && result?.members.length > 0 &&
-              result?.members.map((elm, key) => {
-                // console.log("dsertg", elm?.photo);
+    //   fetch(`${process.env.REACT_APP_API}/api/v1/get/shop/${id}`, {
+    //     method: "GET",
+    //     headers: {
+    //       Authorization: token
+    //     }
+    //   }).then((res) => res.json())
+    //     .then((result) => {
+    //       console.log(result, '234567');
+    //       if (result.success) {
+    //         console.log(result, 'Result');
+    //         setLoading(false);
+    //         setData(result?.data, "We got profile data");
+    //         setTime(result?.averageEatingTime)
+    //         result?.members && result?.members.length > 0 &&
+    //           result?.members.map((elm, key) => {
+    //             // console.log("dsertg", elm?.photo);
 
-                setProfilesListData((prev) => [...prev, {
-                  image: elm?.photo ? `${process.env.REACT_APP_IMG}/${elm?.photo}` : avatar,
-                  name: elm?.name,
-                  description: `id : ${elm?.id} phone : ${elm?.phone} email : ${elm?.email}`,
-                  action: {
-                    type: "internal",
-                    route: "/pages/profile/profile-overview",
-                    color: "info",
-                    label: "Active",
-                  },
-                }])
-              });
-            result?.plans && result?.plans.length > 0 &&
-              result?.plans.map((elm) => {
-                setAttendListData((prev) => [...prev, {
-                  image: team3,
-                  name: elm?.planName,
-                  description: `Amount : ${elm?.amount} , thaliCount : ${elm?.thaliCount}`,
-                  action: {
-                    type: "internal",
-                    route: "/",
-                    color: "info",
-                    label: `expiry : ${elm?.expiry} days`,
-                  },
-                }])
-              })
-          }
-          // console.log(result, 'erespnosef')
-        })
-    } catch (error) {
-      toast.error(error.message)
-    }
+    //             setProfilesListData((prev) => [...prev, {
+    //               image: elm?.photo ? `${process.env.REACT_APP_IMG}/${elm?.photo}` : avatar,
+    //               name: elm?.name,
+    //               description: `id : ${elm?.id} phone : ${elm?.phone} email : ${elm?.email}`,
+    //               action: {
+    //                 type: "internal",
+    //                 route: "/pages/profile/profile-overview",
+    //                 color: "info",
+    //                 label: "Active",
+    //               },
+    //             }])
+    //           });
+    //         result?.plans && result?.plans.length > 0 &&
+    //           result?.plans.map((elm) => {
+    //             setAttendListData((prev) => [...prev, {
+    //               image: team3,
+    //               name: elm?.planName,
+    //               description: `Amount : ${elm?.amount} , thaliCount : ${elm?.thaliCount}`,
+    //               action: {
+    //                 type: "internal",
+    //                 route: "/",
+    //                 color: "info",
+    //                 label: `expiry : ${elm?.expiry} days`,
+    //               },
+    //             }])
+    //           })
+    //       }
+    //       // console.log(result, 'erespnosef')
+    //     })
+    // } catch (error) {
+    //   toast.error(error.message)
+    // }
     console.log("it runs again...");
-  }, [id]);
+  }, []);
 
   // console.log(profilesListData, "123456")
   return (
@@ -132,8 +136,8 @@ const index = ({ show, unShow, id, dep }) => {
             >
 
               <Tab label="Restaurant" />
-              <Tab label="Shallow Members" />
               <Tab label="Plans" />
+              <Tab label="Shallow Members" />
 
             </Tabs>
           </AppBar>
@@ -160,7 +164,7 @@ const index = ({ show, unShow, id, dep }) => {
                 <Grid container spacing={3} alignItems="center">
                   <Grid item>
                     <SoftAvatar
-                      src={data[0]?.logo ? `${process.env.REACT_APP_IMG}/${data[0]?.logo}` : avatar}
+                      src={data?.logo ? `${process.env.REACT_APP_IMG}/${data?.logo}` : avatar}
                       alt="profile-image"
                       variant="rounded"
                       size="xl"
@@ -170,30 +174,19 @@ const index = ({ show, unShow, id, dep }) => {
                   <Grid item>
                     <SoftBox height="100%" mt={0.5} lineHeight={1}>
                       <SoftTypography variant="h5" fontWeight="medium" width="200px">
-                        {data[0]?.name} - {data[0]?.id}
+                        {data?.name} - {data?.id}
                       </SoftTypography>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data[0]?.email}
+                        {data?.email}
                       </SoftTypography><br></br>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data[0]?.contact}
+                        {data?.contact}
                       </SoftTypography><br></br>
 
                     </SoftBox>
 
 
                   </Grid>
-
-                  <SoftBox sx={{
-                    ml: { xs: 4, md: 24 },  // 0 margin on extra-small (xs) screens, 24 margin on medium (md) and larger screens
-                    mt: { xs: 2, md: 0 },   // 2 margin on extra-small (xs) screens, 0 margin on medium (md) and larger screens
-
-                  }}>
-                    <SoftTypography variant="h5" fontWeight="medium">
-                      Disable
-                    </SoftTypography>
-                    <Switch />
-                  </SoftBox>
                 </Grid>
               </Card>
               <Card
@@ -212,7 +205,7 @@ const index = ({ show, unShow, id, dep }) => {
                 <Grid container spacing={3} alignItems="center">
                   <Grid item>
                     <SoftAvatar
-                      src={data[0]?.userId?.userImage ? `${process.env.REACT_APP_IMG}/${data[0]?.userId?.userImage}` : avatar}
+                      src={data?.userId?.userImage ? `${process.env.REACT_APP_IMG}/${data?.userId?.userImage}` : avatar}
                       alt="profile-image"
                       variant="rounded"
                       size="xl"
@@ -222,13 +215,13 @@ const index = ({ show, unShow, id, dep }) => {
                   <Grid item>
                     <SoftBox height="100%" mt={0.5} lineHeight={1}>
                       <SoftTypography variant="h5" fontWeight="medium">
-                        {data[0]?.userId?.fullName}
+                        {data?.userId?.fullName}
                       </SoftTypography>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data[0]?.userId?.email}
+                        {data?.userId?.email}
                       </SoftTypography><br></br>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data[0]?.userId?.phone}
+                        {data?.userId?.phone}
                       </SoftTypography><br></br>
 
                     </SoftBox>
@@ -255,11 +248,11 @@ const index = ({ show, unShow, id, dep }) => {
                     </SoftTypography>
                     <SoftBox height="100%" mt={0.5} lineHeight={1}>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
-                        Launch : {time?.averageEatingTime?.morining}
+                        Launch : {data.openTime}
                       </SoftTypography>
                     </SoftBox>
                     <SoftTypography variant="button" color="text" fontWeight="medium">
-                      Dinner : {time?.averageEatingTime?.night}
+                      Dinner : {data.closeTime}
                     </SoftTypography>
                   </SoftBox>
                 </Grid>
@@ -271,15 +264,61 @@ const index = ({ show, unShow, id, dep }) => {
               {profilesListData.length > 0 ?
                 <ProfilesList title="All Shallow Members" profiles={profilesListData} />
                 : <SoftBox >
-                  <img src={nodata} width='100%' style={{maxWidth:"300px", marginLeft: 'auto',marginRight: 'auto', display:'block' }} alt="" />
+                  <img src={nodata} width='100%' style={{ maxWidth: "300px", marginLeft: 'auto', marginRight: 'auto', display: 'block' }} alt="" />
                 </SoftBox>
               }
             </TabPanel>
+
             <TabPanel value={value} index={2} dir={theme.direction}>
-              {profilesListData.length > 0 ?
-                <ProfilesList title="Plans" profiles={attendListData} />
+              {data && data.plans.length > 0 ?
+                <SoftBox>
+                  <Card
+                    sx={{
+                      backdropFilter: `saturate(200%) blur(30px)`,
+                      backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+                      boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
+                      position: "relative",
+                      mx: 3,
+                      py: 2,
+                      my: 2,
+                      px: 3
+                    }}
+                  >
+                    {console.log(data.plans, 'elm')}
+
+                    {data.plans.map((elm, i) => (
+                      <SoftBox>
+                        <SoftTypography variant='h3'>Plan {i+1}</SoftTypography>
+                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
+                          <SoftTypography >Plan Name:</SoftTypography>
+                          <SoftTypography ml={1}>{elm.planName}</SoftTypography>
+                        </SoftBox>
+                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
+                          <SoftTypography >Items:</SoftTypography>
+                          <SoftTypography ml={1}>{elm.items}</SoftTypography>
+                        </SoftBox>
+                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
+                          <SoftTypography >Plan Amount:</SoftTypography>
+                          <SoftTypography ml={1}>{elm.amount}</SoftTypography>
+                        </SoftBox>
+                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
+                          <SoftTypography >Plan Expiry:</SoftTypography>
+                          <SoftTypography ml={1}>{elm.expiry}</SoftTypography>
+                        </SoftBox>
+                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
+                          <SoftTypography >Thali Count:</SoftTypography>
+                          <SoftTypography ml={1}>{elm.thaliCount}</SoftTypography>
+                        </SoftBox>
+
+                      </SoftBox>
+
+                    ))}
+
+                  </Card>
+
+                </SoftBox>
                 : <SoftBox >
-                  <img src={nodata} width='100%' style={{maxWidth:"300px", marginLeft: 'auto',marginRight: 'auto', display:'block' }} alt="" />
+                  <img src={nodata} width='100%' style={{ maxWidth: "300px", marginLeft: 'auto', marginRight: 'auto', display: 'block' }} alt="" />
                 </SoftBox>}
             </TabPanel>
           </SwipeableViews>

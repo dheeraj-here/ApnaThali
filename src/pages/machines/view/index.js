@@ -10,7 +10,6 @@ import Grid from "@mui/material/Grid";
 import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import restroData from '../connectData/authorsTableData';
 import Loading from "components/ApnaLoading";
 import BasicModal from "components/Modal";
 import { Switch } from "@mui/material";
@@ -18,7 +17,7 @@ import SoftButton from "components/SoftButton";
 // import ViewCustomer from "./";
 
 
-const index = ({ show, unShow, handleFresh, connect, data, machineNo }) => {
+const index = ({ show, unShow, handleFresh, data, machineNo }) => {
 
   // const [data, setData] = useState([]);
   const [counts, setCounts] = useState([]);
@@ -34,10 +33,17 @@ const index = ({ show, unShow, handleFresh, connect, data, machineNo }) => {
   const [resId, setResId] = useState('');
   const [connected, setConnected] = useState(false)
 
-  // useEffect(() => {
-  //   // console.log(data, "sdfghjk");
-  // }, []);
+  useEffect(() => {
+    // console.log(data, "sdfghjk");
+    // data.map((op) => {
+    //   console.log(op.id);
+    // })
+  }, []);
   // console.log(machineData, 'sderfgthyujikolp');
+
+  const h = () => {
+    console.log("Hello");
+  }
 
   const handleDropdownChange = (event) => {
     const val = event.target.value;
@@ -83,7 +89,6 @@ const index = ({ show, unShow, handleFresh, connect, data, machineNo }) => {
     }
   }
 
-  
 
   return (
     <BasicModal show={show} unShow={unShow} width={600} top="70%">
@@ -106,16 +111,14 @@ const index = ({ show, unShow, handleFresh, connect, data, machineNo }) => {
                 border: '1px solid #ccc',
               }}
             >
-              <option value="" disabled>
+              <option value="" disabled onClick={h}>
                 Select an option
               </option>
               {data.map((option) => (
                 <option key={option._id} value={option.id}>
                   {option.id}
                 </option>
-
               ))}
-
             </select>
           </SoftBox>
 

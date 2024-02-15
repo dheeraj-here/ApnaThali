@@ -9,7 +9,7 @@ const index = ({ data, category, name, onChange, origin, required, disabled }) =
         <select
           disabled={disabled}
           required={required}
-          className="select Category"
+          classNameName="select Category"
           name={name}
           onChange={onChange}
           value={category}

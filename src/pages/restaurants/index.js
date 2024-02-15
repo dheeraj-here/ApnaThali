@@ -18,6 +18,7 @@ import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutl
 import SoftButton from "components/SoftButton";
 import { UseSelector } from "react-redux/es/hooks/useSelector";
 import { useSelector } from "react-redux/es/hooks/useSelector";
+import CreateShop from "./form/index";
 
 function Tables() {
 
@@ -33,10 +34,23 @@ function Tables() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   const [result, setResult] = useState(null);
-  const search = useSelector((state)=>state.searchSlice.search);
+  const search = useSelector((state) => state.searchSlice.search);
+  const [showForm, setShowForm] = useState(false);
+  const [shopId, setShopId] = useState(null);
+  const [refresh, setRefresh] = useState(0);
 
 
+  const handleRefresh = () => setRefresh(refresh + 1);
 
+  const handleShowForm = (e) => {
+    console.log("ID", e);
+    setShowForm(!showForm)
+    setShopId(e)
+  };
+
+  const handleActive = (e, elm) => {
+    console.log(e, elm, "status runs...");
+  }
   const handlePageChange = (newPage) => {
     console.log(newPage);
     setCurrentPage(newPage);
@@ -58,11 +72,35 @@ function Tables() {
   );
 
 
-  const handleViewCustomer = (e) => {
+  const handleViewCustomer = async (e) => {
     setC(c + 1)
     setshowCustomer(!showCustomer)
-    setCustomerId(e)
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API}/api/v1/get/shop/${e}`, {
+        method: "GET",
+        redirect: "follow",
+        headers: {
+          Authorization: token
+        }
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`)
+      }
+      const result = await res.json();
+      console.log(result, "eryhg");
+
+      if (result.success) {
+        setCustomerId(result.data);
+        console.log(result.data, 'got res data');
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message)
+    }
   }
+
+
 
   const downloadQR = async (e) => {
     console.log("Download", e);
@@ -98,7 +136,7 @@ function Tables() {
   const getRestro = (ev) => {
     try {
       setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/api/v1/get/admin/Restaurant/${id}?search=${search}`, {
+      fetch(`https://devserver.apnathali.com/api/v1/get/admin/Restaurant/${id}?search=${search}`, {
         method: "GET",
         headers: {
           Authorization: token
@@ -112,7 +150,8 @@ function Tables() {
             const slicedData = customerData({
               data: result?.data.slice(startIdx, endIdx),
               view: handleViewCustomer,
-              downloadQR: downloadQR
+              downloadQR: downloadQR,
+              handleActive: handleActive
             });
             setCounts(result.counts);
             setData(slicedData);
@@ -127,16 +166,17 @@ function Tables() {
   }
 
   useEffect(() => {
-    if(location.pathname=='/restaurants'){
-      getRestro(search)
-    }  }, [id, currentPage, search])
-
+    if (location.pathname == '/restaurants') {
+      getRestro(search);
+    }
+  }, [id, currentPage, search])
 
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <ViewCustomer show={showCustomer} unShow={setshowCustomer} id={customerId} dep={c} />
+      <CreateShop show={showForm} unShow={setShowForm} data={shopId} handleRefresh={handleRefresh} />
+      <ViewCustomer show={showCustomer} unShow={setshowCustomer} data={customerId} dep={c} />
       <SoftBox py={3}>
         <SoftBox mb={3}>
           {/* <SoftBox mb={3}>
@@ -179,6 +219,14 @@ function Tables() {
             </Grid>
           </SoftBox> */}
           <Card>
+            <SoftButton
+              size="small"
+              color="black"
+              sx={{ width: '100px', borderRadius: '5px', mx: '10px', padding: '10px 80px' }}
+              onClick={() => handleShowForm(null)}
+            >
+              Create Shop
+            </SoftButton>
             <SoftBox
               sx={{
                 "& .MuiTableRow-root:not(:last-child)": {

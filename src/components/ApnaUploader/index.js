@@ -79,7 +79,7 @@ ImagePicker.propTypes = {
   images: PropTypes.array.isRequired,
   name: PropTypes.string,
   video: PropTypes.string,
-  className: PropTypes.string,
+  classNameName: PropTypes.string,
   multiple: PropTypes.string,
   type: PropTypes.string,
   onChange: PropTypes.string,

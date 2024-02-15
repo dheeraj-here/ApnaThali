@@ -23,6 +23,11 @@ import Machine from "pages/machines"
 import Helps from "examples/Icons/Help"
 import Notification from 'pages/notification'
 import Whatsapp from 'pages/whatsapp'
+import Shops from 'pages/shop'
+import Banner from 'pages/banner'
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
+// import Banenr from 'pages/banners'
 
 const routes = [
   {
@@ -70,7 +75,6 @@ const routes = [
     component: <Expense />,
     noCollapse: true,
   },
- 
   {
     type: "collapse",
     name: "Machines",
@@ -80,6 +84,33 @@ const routes = [
     component: <Machine />,
     noCollapse: true,
   },
+  {
+    type: "collapse",
+    name: "Shop",
+    key: "shop",
+    route: "/shop",
+    icon: <StorefrontIcon size="12px" />,
+    component: <Shops />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Banner",
+    key: "banner",
+    route: "/banner",
+    icon: <ViewCarouselIcon  size="12px" />,
+    component: <Banner />,
+    noCollapse: true,
+  },
+  // {
+  //   type: "collapse",
+  //   name: "Banners",
+  //   key: "banners",
+  //   route: "/banners",
+  //   icon: <AdfScannerOutlinedIcon size="12px" />,
+  //   component: <Banner />,
+  //   noCollapse: true,
+  // },
   {
     type: "collapse",
     name: "Notification",

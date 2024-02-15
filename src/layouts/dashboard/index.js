@@ -225,7 +225,7 @@ function Dashboard() {
                     description={
                       <SoftBox display="flex" alignItems="center">
                         <SoftBox fontSize={size.xl} color="success" mb={0.3} mr={0.5} lineHeight={0}>
-                          <Icon className="font-bold">arrow_upward</Icon>
+                          <Icon classNameName="font-bold">arrow_upward</Icon>
                         </SoftBox>
                         <SoftTypography variant="button" color="text" fontWeight="medium">
                           See restaurants & Members

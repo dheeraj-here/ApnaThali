@@ -6,11 +6,11 @@ const firebaseSlice = createSlice({
     token: null,
   },
   reducers: {
-    setFirebaseToken: (state, action) => {
+    handletoken: (state, action) => {
       state.token = action.payload;
     },
   },
 });
 
-export const { setFirebaseToken } = firebaseSlice.actions;
+export const { handletoken } = firebaseSlice.actions;
 export default firebaseSlice.reducer;

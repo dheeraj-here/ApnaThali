@@ -8,9 +8,11 @@ export const getSearch = createAsyncThunk("getSearch", async (search) => {
 const searchSlice = createSlice({
   name: "search",
   initialState: {
-    search:'' 
+    search:''
   },
-  reducers: {},
+  reducers: {
+
+  },
   extraReducers: (builder) => {
     builder.addCase(getSearch.fulfilled, (state, action) => {
       state.search = action.payload;

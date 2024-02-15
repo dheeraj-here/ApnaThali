@@ -50,7 +50,7 @@ function SidenavCard() {
             star
           </Icon>
         </SoftBox>
-        <SoftBox lineHeight={1}>
+        {/* <SoftBox lineHeight={1}> */}
           {/* <SoftTypography variant="h6" color="white">
             Need help?
           </SoftTypography>
@@ -70,7 +70,7 @@ function SidenavCard() {
           >
             Enjoy your thali
           </SoftButton> */}
-        </SoftBox>
+        {/* </SoftBox> */}
       </CardContent>
     </Card>
   );

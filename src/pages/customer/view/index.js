@@ -149,7 +149,7 @@ const index = ({ show, unShow, id }) => {
 
 
                 <Grid container spacing={3} alignItems="center">
-                  {/* <div className=""> */}
+                  {/* <div classNameName=""> */}
                   <Grid item>
                     <SoftAvatar
                       src={data?.member?.photo ? `${process.env.REACT_APP_IMG}/${data?.member?.photo}` : avatar}
@@ -216,17 +216,16 @@ const index = ({ show, unShow, id }) => {
                   </SoftBox>
                 </Grid>
               </Card>
-
-
             </TabPanel>
+
             <TabPanel value={value} index={1} dir={theme.direction}>
               <ProfilesList title="All Shallow Members" profiles={profilesListData} />
-
             </TabPanel>
+
             <TabPanel value={value} index={2} dir={theme.direction}>
               <ProfilesList title="Attendance" profiles={attendListData} />
-
             </TabPanel>
+
           </SwipeableViews>
         </SoftBox>
       </BasicModal>
@@ -235,6 +234,7 @@ const index = ({ show, unShow, id }) => {
 }
 
 export default index;
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 

@@ -1,14 +1,13 @@
-
 import { useState, useEffect, useMemo } from "react";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./firebase";
+// import { firebaseConfig } from "./firebase";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+import { messaging } from "./firebase";
+// const app = initializeApp(firebaseConfig);
+// const messaging = getMessaging(app);
 
 // react-router components
-import { Routes, Route, Navigate, useLocation ,useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -38,12 +37,50 @@ export default function App() {
   const { pathname } = useLocation();
 
   const navigate = useNavigate()
-  const isToken  = localStorage.getItem('token')
+  const isToken = localStorage.getItem('token')
   useEffect(() => {
-    if(isToken==null){
+    if (isToken == null) {
       navigate('/login')
     }
-   }, [])
+  }, [])
+
+  useEffect(() => {
+    const getFCMToken = async () => {
+      const messaging = getMessaging();
+      getToken(messaging, { vapidKey: 'BFoNQjIbGWBwD1ta5iObFy3D5F61sVcjrbw8aUYHALmzmbaNTjUabGIr03vR1yTF-ByTEwPV9tDXSlqIKpzC-Ps' }).then((currentToken) => {
+        if (currentToken) {
+          console.log("FCM Token from React Component:", currentToken);
+          // Send the token to your server and update the UI if necessary
+          // ...
+        } else {
+          // Show permission request UI
+          console.log('No registration token available. Request permission to generate one.');
+          // ...
+        }
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+        // ...
+      });
+      // try {
+      //   console.log("Firebase token function...");
+      //   const currentToken = await messaging.getToken({
+      //     vapidKey: `BFoNQjIbGWBwD1ta5iObFy3D5F61sVcjrbw8aUYHALmzmbaNTjUabGIr03vR1yTF-ByTEwPV9tDXSlqIKpzC-Ps`,
+      //   });
+
+      //   if (currentToken) {
+      //     console.log("FCM Token from React Component:", currentToken);
+      //     // Send the token to your server for further handling
+      //   } else {
+      //     console.log("No registration token available.");
+      //   }
+      // } catch (error) {
+      //   console.error("Error getting FCM token:", error);
+      // }
+    };
+
+    getFCMToken();
+
+  }, [])
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -126,10 +163,11 @@ export default function App() {
             onMouseLeave={handleOnMouseLeave}
           />
           <Configurator />
+
           {configsButton}
         </>
       )}
-     
+
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/dashboard" />} />

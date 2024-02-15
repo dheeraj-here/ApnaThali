@@ -49,8 +49,8 @@ export default function BasicModal({
     top: "4px",
     right: "7px",
     width: width ? width : 400,
-    overflowY: "auto"
   };
+  
   return (
     <div>
       <Modal
@@ -68,8 +68,6 @@ export default function BasicModal({
 
           backgroundColor: "black",
         }}>
-       
-       
         </SoftBox> */}
 
         <SoftBox sx={style}>
@@ -82,7 +80,7 @@ export default function BasicModal({
           >
             <CancelPresentationIcon />
           </IconButton>
-          
+
           <SoftBox>
             {children}
           </SoftBox>

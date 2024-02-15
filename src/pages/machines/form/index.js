@@ -88,12 +88,12 @@ const index = ({ show, unShow, data, handleRefresh }) => {
     }
     const onChange = (e) => {
         const name = e.target.name;
-    const value = e.target.value;
+        const value = e.target.value;
 
-    // Validate that the entered value contains only numeric characters
-    if (/^\d*$/.test(value) || value === "") {
-        setMno(value);
-    }
+        // Validate that the entered value contains only numeric characters
+        if (/^\d*$/.test(value) || value === "") {
+            setMno(value);
+        }
     };
 
     return (
@@ -125,7 +125,7 @@ const index = ({ show, unShow, data, handleRefresh }) => {
                                     maxLength: 10,
                                     pattern: "\\d*",  // Allow only digits
                                 }}
-                            
+
                             />
                         </SoftBox>
                         <SoftButton

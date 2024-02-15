@@ -7,8 +7,10 @@ import team4 from "assets/images/logos/restaurant.png";
 import Icon from "@mui/material/Icon";
 import avatar from "assets/images/cust-avatar.jpg"
 import SoftButton from "components/SoftButton";
+import Switch from '@mui/material/Switch';
 
-export function CustomerData({ data, view, downloadQR }) {
+
+export function CustomerData({ data, view, downloadQR, handleActive }) {
 
   const tableData = {
     columns: [
@@ -16,7 +18,6 @@ export function CustomerData({ data, view, downloadQR }) {
       { name: "author", align: "left" },
       { name: "function", align: "left" },
       { name: "status", align: "center" },
-      { name: "time", align: "center" },
       { name: "action", align: "center" },
       { name: "download", align: "center"}
     ],
@@ -56,19 +57,8 @@ export function CustomerData({ data, view, downloadQR }) {
         </SoftBox>
       ),
       status: (
-        <SoftBadge variant="gradient" badgeContent={elm?.status} color={elm?.status == 'Active' ? "success" : "error"} size="xs" container />
-      ),
-      time: (
-        <SoftBox display="flex" flexDirection="column">
-          <SoftTypography variant="caption" fontWeight="medium" color="text">
-            Open: 23:00 PM
-          </SoftTypography>
-          <SoftTypography variant="caption" color="secondary">
-            Close: 12:00 AM
-          </SoftTypography>
-        </SoftBox>
-
-      ),
+        <Switch onChange={(e) => handleActive(e, elm)}/>
+        ),
       action: (
         <Icon fontSize="small" color="inherit" style={{ cursor: 'pointer' }} onClick={() => view(elm._id)}>
           visibility

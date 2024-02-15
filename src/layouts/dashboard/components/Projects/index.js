@@ -21,7 +21,7 @@ function Projects({data}) {
 
   useEffect(() => {
     data&&data.length>0&&data.map((elm, index)=>{
-      console.log(elm, "we got elm in db", index);
+      // console.log(elm, "we got elm in db", index);
        setRows(prev=>[...prev,{
         companies: [elm?.logo?`${process.env.REACT_APP_IMG}/${elm?.logo}`:Restro, elm?.name],
         detail: (

@@ -180,9 +180,9 @@ export function BasicTabs(props) {
                     >
                       <Editor
                         editorState={editorState[0]}
-                        toolbarClassName="toolbarClassName"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName="editorClassName"
+                        toolbarclassNameName="toolbarclassNameName"
+                        wrapperclassNameName="wrapperclassNameName"
+                        editorclassNameName="editorclassNameName"
                         onEditorStateChange={onChangeEditor}
                       />
                       <SoftBox
@@ -239,9 +239,9 @@ export function BasicTabs(props) {
                     >
                       <Editor
                         editorState={editorState[1]}
-                        toolbarClassName="toolbarClassName"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName="editorClassName"
+                        toolbarclassNameName="toolbarclassNameName"
+                        wrapperclassNameName="wrapperclassNameName"
+                        editorclassNameName="editorclassNameName"
                         onEditorStateChange={onChangeEditor}
                       />
                       <SoftBox

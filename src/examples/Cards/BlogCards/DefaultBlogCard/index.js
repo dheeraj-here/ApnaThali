@@ -61,7 +61,7 @@ function DefaultBlogCard({ image, category, title, description, author, action }
                 display="inline"
                 variant="h5"
                 textTransform="capitalize"
-                className="color-background"
+                classNameName="color-background"
               >
                 {title}
               </SoftTypography>
@@ -72,7 +72,7 @@ function DefaultBlogCard({ image, category, title, description, author, action }
                 display="inline"
                 variant="h5"
                 textTransform="capitalize"
-                className="color-background"
+                classNameName="color-background"
               >
                 {title}
               </SoftTypography>

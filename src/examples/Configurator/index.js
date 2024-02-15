@@ -226,7 +226,7 @@ function Configurator() {
         </SoftBox>
         <SoftBox display="flex" justifyContent="center">
           <a
-            className="github-button"
+            classNameName="github-button"
             href="https://github.com/creativetimofficial/soft-ui-dashboard-react"
             data-icon="octicon-star"
             data-size="large"

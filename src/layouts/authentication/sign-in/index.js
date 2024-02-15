@@ -19,7 +19,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import curved9 from "assets/images/curved-images/curved0.jpg";
 import toast from "react-hot-toast";
 // import { sendFirebaseTokenToServer, startFirebaseMessageListener } from "firebase";
-import { requestPermission, onMessageListener } from "../../../firebase";
+// import { requestPermission, onMessageListener } from "../../../firebase";
  
 
 
@@ -60,14 +60,14 @@ function SignIn() {
         return toast.error(err.message);
       });
 
-      requestPermission((firebaseToken) => {
-        console.log("Firebase Token:", firebaseToken);
+      // requestPermission((firebaseToken) => {
+      //   console.log("Firebase Token:", firebaseToken);
     
-        // Now you have the Firebase token, you can use it as needed
-        // For example, you can send it to your server or start listening for messages
-        // sendFirebaseTokenToServer(firebaseToken);
-        // startFirebaseMessageListener();
-      })
+      //   // Now you have the Firebase token, you can use it as needed
+      //   // For example, you can send it to your server or start listening for messages
+      //   // sendFirebaseTokenToServer(firebaseToken);
+      //   // startFirebaseMessageListener();
+      // })
   };
   return (
     <CoverLayout

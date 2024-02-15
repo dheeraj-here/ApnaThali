@@ -89,7 +89,7 @@ const ApnaSelect2 = ({ data, value, name, onChange, origin, valueKey, nameKey, i
                                 <ListItemButton onClick={() => {
                                 }} sx={{ pl: 1 }}>
                                     <SoftInput
-                                        className="form-control"
+                                        classNameName="form-control"
                                         type="text"
                                         data-bs-binded-element="#phone-value"
                                         data-bs-unset-value="Not specified"
