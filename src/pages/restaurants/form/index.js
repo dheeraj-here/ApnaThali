@@ -46,10 +46,12 @@ const index = ({ show, unShow, handleRefresh, data }) => {
         dinner: "",
         logo: '',
         prefVal: '',
+        type: '',
         upiId: '',
         email: '',
         ownerName: ''
     });
+
     const [plans, setPlans] = useState([
         {
             name: '',
@@ -90,27 +92,23 @@ const index = ({ show, unShow, handleRefresh, data }) => {
     // }
 
     useEffect(() => {
-        if (data != null) {
-            setValues({
-                name: data.name || '',
-                description: data.description || '',
-                phone: data.phone,
-                sunday: data.sunday || '',
-                sundaySpecial: data.sundaySpecial || '',
-                launch: data.launch || '',
-                dinner: data.dinner || '',
-                logo: '', // You may need to handle photos separately
-                prefVal: data.preference || '',
-                type: data.type,
-                upiId: '',
-                email: data.email,
-                ownerName: data.ownerName
-            });
+        setValues({
+            name: "",
+            description: "",
+            phone: "",
+            sunday: "",
+            sundaySpecial: "",
+            launch: "",
+            dinner: "",
+            logo: '',
+            prefVal: '',
+            type: '',
+            upiId: '',
+            email: '',
+            ownerName: ''
+        });
 
-            if (data.plans && Array.isArray(data.plans)) {
-                setPlans([...data.plans]);
-            }
-        }
+        setPlans([]);
     }, [handleRefresh])
 
     const id = localStorage.getItem('id');
@@ -132,7 +130,7 @@ const index = ({ show, unShow, handleRefresh, data }) => {
             formData.append('phone', phone);
             formData.append('sunday', sunday);
             formData.append('sundaySpecial', sundaySpecial);
-            if (type === 'restaurent') {
+            if (type === 'restaurant') {
                 formData.append('openTime', launch);
                 formData.append('closeTime', dinner);
             } else {
@@ -258,7 +256,6 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                 prefVal: e.target.value
             })
         } else {
-            
             setValues({
                 ...values,
                 type: e.target.value
@@ -364,7 +361,7 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                                     value={values.sundaySpecial}
                                 />
                             </SoftBox>
-                            {values.type && values.type==='restaurant' && <>
+                            {values.type && values.type === 'restaurant' && <>
                                 <SoftBox m={1} flexBasis={{ md: '47%', sm: '80%' }} style={{ maxWidth: '100%' }}>
                                     <SoftInput
                                         name="launch"
@@ -383,7 +380,7 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                                 </SoftBox>
                             </>}
 
-                            {values.type && values.type!=='restaurant' && <>
+                            {values.type && values.type !== 'restaurant' && <>
                                 <SoftBox m={1} flexBasis={{ md: '47%', sm: '80%' }} style={{ maxWidth: '100%' }}>
                                     <SoftInput
                                         name="launch"
@@ -539,7 +536,7 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                                             // right: '5px',
                                             color: 'red',
                                             cursor: 'pointer',
-                                        }} onClick={() => handleRemoveImage(index)}><CloseIcon/></SoftTypography>
+                                        }} onClick={() => handleRemoveImage(index)}><CloseIcon /></SoftTypography>
                                     </div>
                                 </SoftBox>
                             ))}

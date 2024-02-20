@@ -31,30 +31,36 @@ function Tables() {
   const [showCustomer, setshowCustomer] = useState(false);
   const [customerId, setCustomerId] = useState('');
   const location = useLocation();
-  const search = useSelector((state)=>state.searchSlice.search);
+  const search = useSelector((state) => state.searchSlice.search);
   const [totalPage, setTotalPage] = useState(0);
-  
+
   const handleViewCustomer = (e) => {
     setshowCustomer(!showCustomer)
     setCustomerId(e)
   }
-// api/v1/get/customer/admin/${id}?search=${ev}
-  const getCustomerList = (ev) =>{
+
+  const handlePageChange = (page) => {
+    getCustomerList(page);
+  };
+
+  // api/v1/get/customer/admin/${id}?search=${ev}
+  const getCustomerList = (ev) => {
     console.log(id, "lc id");
     try {
       setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/api/v1/get/all/User/${id}?.search=${ev}`, {
+      fetch(`${process.env.REACT_APP_API}/api/v1/get/all/User/${id}?page=${ev}`, {
         method: "GET",
         headers: {
           Authorization: token
         }
       }).then((res) => res.json())
         .then((result) => {
-         console.log(result, "result of cust...")
+          console.log(result, "result of cust...")
           if (result.success) {
-            setTotalPage(result.data?.totalPage);
+            console.log(result, "for pagination");
+            setTotalPage(result.pagination.totalPages);
             setLoading(false);
-            setCounts(result.data.length);
+            setCounts(result.pagination);
             setData(customerData({
               data: result?.data,
               view: handleViewCustomer
@@ -67,7 +73,7 @@ function Tables() {
     }
   }
   useEffect(() => {
-    if(location.pathname=='/customers'){
+    if (location.pathname == '/customers') {
       getCustomerList(search)
     }
   }, [search]);
@@ -84,29 +90,29 @@ function Tables() {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6} xl={3}>
                 <MiniStatisticsCard
-                  title={{ text: "Active member" }}
-                  count={counts.active}
+                  title={{ text: "Total member" }}
+                  count={counts.totalUsers}
                   percentage={{ color: "success", text: "+55%" }}
                   icon={{ color: "info", component: "paid" }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} xl={3}>
+              {/* <Grid item xs={12} sm={6} xl={3}>
                 <MiniStatisticsCard
                   title={{ text: "UnActive member" }}
                   count={counts.unActive}
                   percentage={{ color: "success", text: "+3%" }}
                   icon={{ color: "info", component: "public" }}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6} xl={3}>
+              </Grid> */}
+              {/* <Grid item xs={12} sm={6} xl={3}>
                 <MiniStatisticsCard
                   title={{ text: "Plan Online" }}
                   count={counts.onlinPlan}
                   percentage={{ color: "error", text: "-2%" }}
                   icon={{ color: "info", component: "emoji_events" }}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6} xl={3}>
+              </Grid> */}
+              {/* <Grid item xs={12} sm={6} xl={3}>
                 <MiniStatisticsCard
                   title={{ text: "Plan Offline" }}
                   count={counts.offlinePlan}
@@ -116,7 +122,7 @@ function Tables() {
                     component:  <HelpOutlineOutlinedIcon fontSize="small" />,
                   }}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </SoftBox>
           <Card>
@@ -133,8 +139,9 @@ function Tables() {
               {loading ? <Loading /> : <Table columns={columns} rows={rows} />}
             </SoftBox>
             {
-              rows&&rows.length > 20 && <Stack spacing={5} m={5} sx={{ display: "flex", alignItems: 'center', justifyContent: "center" }}>
-                <Pagination  count={totalPage} variant="outlined" shape="rounded" />
+              rows && <Stack spacing={5} m={5} sx={{ display: "flex", alignItems: 'center', justifyContent: "center" }}>
+                <Pagination onChange={(event, page) => handlePageChange(page)}
+                  count={totalPage} variant="outlined" shape="rounded" />
               </Stack>
             }
           </Card>

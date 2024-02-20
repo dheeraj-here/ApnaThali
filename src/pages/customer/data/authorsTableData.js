@@ -13,7 +13,6 @@ const tableData = {
     { name: "author", align: "left" },
     { name: "function", align: "left" },
     { name: "status", align: "center" },
-    { name: "shallow", align: "center" },
   ],
 
   rows: [],
@@ -28,7 +27,7 @@ const tableData = {
         </SoftBox>
         <SoftBox display="flex" flexDirection="column">
           <SoftTypography variant="button" fontWeight="medium">
-            {elm?.name}
+            {elm?.fullName}
           </SoftTypography>
           <SoftTypography variant="caption" color="secondary">
             {elm?.email}
@@ -46,11 +45,11 @@ const tableData = {
       status: (
         <SoftBadge variant="gradient" badgeContent="online" color="success" size="xs" container />
       ),
-      shallow: (
-        <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-            {elm?.shallowMember}
-        </SoftTypography>
-      ),
+      // shallow: (
+      //   <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+      //       {elm?.shallowMember}
+      //   </SoftTypography>
+      // ),
       // action: (
       //   <Icon fontSize="small" color="inherit" onClick={()=>view(elm?._id)}>
       //   visibility

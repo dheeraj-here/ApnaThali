@@ -19,7 +19,7 @@ export function CustomerData({ data, view, downloadQR, handleActive }) {
       { name: "function", align: "left" },
       { name: "status", align: "center" },
       { name: "action", align: "center" },
-      { name: "download", align: "center"}
+      { name: "download", align: "center" }
     ],
 
     rows: [],
@@ -41,9 +41,9 @@ export function CustomerData({ data, view, downloadQR, handleActive }) {
           <SoftTypography variant="button" fontWeight="medium">
             {elm?.name}
           </SoftTypography>
-          <SoftTypography variant="caption" color="secondary">
+          {/* <SoftTypography variant="caption" color="secondary">
             {elm?.email}
-          </SoftTypography>
+          </SoftTypography> */}
         </SoftBox>
       </SoftBox>),
       function: (
@@ -51,14 +51,14 @@ export function CustomerData({ data, view, downloadQR, handleActive }) {
           <SoftTypography variant="caption" fontWeight="medium" color="text">
             {`phone : ${elm?.contact}`}
           </SoftTypography>
-          <SoftTypography variant="caption" color="secondary" width="120px">
+          {/* <SoftTypography variant="caption" color="secondary" width="120px">
             restaurant: {elm?.upiId}
-          </SoftTypography>
+          </SoftTypography> */}
         </SoftBox>
       ),
       status: (
-        <Switch onChange={(e) => handleActive(e, elm)}/>
-        ),
+        <Switch checked={elm.isLive} onChange={(e) => handleActive(e, elm)} />
+      ),
       action: (
         <Icon fontSize="small" color="inherit" style={{ cursor: 'pointer' }} onClick={() => view(elm._id)}>
           visibility
@@ -66,12 +66,12 @@ export function CustomerData({ data, view, downloadQR, handleActive }) {
       ),
       download: (
         <SoftButton
-                size="small"
-                color="black"
-                onClick={() => downloadQR(elm._id)}
-              >
-                download qr
-              </SoftButton>
+          size="small"
+          color="black"
+          onClick={() => downloadQR(elm._id)}
+        >
+          download qr
+        </SoftButton>
       )
     })
   })

@@ -26,7 +26,7 @@ import avatar from 'assets/images/cust-avatar.jpg'
 import nodata from 'assets/images/no-data.png'
 import { CenterFocusStrong, Image } from '@mui/icons-material';
 
-const index = ({ show, unShow, data, dep }) => {
+const index = ({ show, unShow, data, reviews }) => {
 
   // const [data, setData] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,12 +35,12 @@ const index = ({ show, unShow, data, dep }) => {
   const [profilesListData, setProfilesListData] = useState([]);
   const [attendListData, setAttendListData] = useState([]);
   const [plan, setPlan] = useState([]);
-
+console.log(data, "Data get");
   const [time, setTime] = useState('')
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  console.log(data, "Data of this res..");
+  console.log(reviews, "Data of Review...");
 
   const handleChangeIndex = (index) => {
     setValue(index);
@@ -59,10 +59,13 @@ const index = ({ show, unShow, data, dep }) => {
     }
   };
 
+
+
   useEffect(() => {
 
-    setPlan([])
-    setPlan(data.plans)
+    setPlan([]);
+    setPlan(data.plans);
+
     // try {
     //   setLoading(true);
 
@@ -122,7 +125,7 @@ const index = ({ show, unShow, data, dep }) => {
 
   // console.log(profilesListData, "123456")
   return (
-    <div>
+    <SoftBox>
       <BasicModal show={show} unShow={unShow} height="70vh">
         <SoftBox mt={2}>
           <AppBar position="static">
@@ -138,6 +141,7 @@ const index = ({ show, unShow, data, dep }) => {
               <Tab label="Restaurant" />
               <Tab label="Plans" />
               <Tab label="Shallow Members" />
+              <Tab label="Reviews" />
 
             </Tabs>
           </AppBar>
@@ -174,7 +178,7 @@ const index = ({ show, unShow, data, dep }) => {
                   <Grid item>
                     <SoftBox height="100%" mt={0.5} lineHeight={1}>
                       <SoftTypography variant="h5" fontWeight="medium" width="200px">
-                        {data?.name} - {data?.id}
+                        {data?.fullName} - {data?.id}
                       </SoftTypography>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
                         {data?.email}
@@ -182,10 +186,7 @@ const index = ({ show, unShow, data, dep }) => {
                       <SoftTypography variant="button" color="text" fontWeight="medium">
                         {data?.contact}
                       </SoftTypography><br></br>
-
                     </SoftBox>
-
-
                   </Grid>
                 </Grid>
               </Card>
@@ -212,23 +213,117 @@ const index = ({ show, unShow, data, dep }) => {
                       shadow="sm"
                     />
                   </Grid>
-                  <Grid item>
-                    <SoftBox height="100%" mt={0.5} lineHeight={1}>
-                      <SoftTypography variant="h5" fontWeight="medium">
-                        {data?.userId?.fullName}
-                      </SoftTypography>
-                      <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data?.userId?.email}
-                      </SoftTypography><br></br>
-                      <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data?.userId?.phone}
-                      </SoftTypography><br></br>
 
+                  <Grid item>
+                    {data.userId && data.userId != null && (
+                      <SoftBox height="100%" mt={0.5} lineHeight={1}>
+                        <SoftTypography variant="h5" fontWeight="medium">
+                          {data?.userId?.fullName}
+                        </SoftTypography>
+                        <SoftTypography variant="button" color="text" fontWeight="medium">
+                          {data?.userId?.email}
+                        </SoftTypography><br></br>
+                        <SoftTypography variant="button" color="text" fontWeight="medium">
+                          {data?.userId?.phone}
+                        </SoftTypography><br></br>
+                      </SoftBox>
+                    )}
+                  </Grid>
+                </Grid>
+              </Card>
+
+              <Card
+                sx={{
+                  backdropFilter: `saturate(200%) blur(30px)`,
+                  backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+                  boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
+                  position: "relative",
+                  mt: 2,
+                  // mx: 3,
+                  py: 2,
+                  px: 2,
+                }}
+              >
+
+                <Grid container spacing={1} width='100%' alignItems="center">
+                  <SoftTypography ml={1} width='40%' variant="h3" fontWeight="medium">
+                    Details
+                  </SoftTypography>
+                  <Grid item m={1} width={{ xs: '100%', md: '60%' }} >
+                    <SoftBox height="100%" mt={0.5} lineHeight={1} display="flex" flexDirection="column">
+
+                      <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                        <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                          Name:
+                        </SoftTypography>
+                        <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                          {data?.name}
+                        </SoftTypography>
+                      </SoftBox>
+
+                      <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                        <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                          Tags:
+                        </SoftTypography>
+                        <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                          {data.tags && data.tags.length > 1 ? data?.tags.join(', ') : ''}
+                        </SoftTypography>
+                      </SoftBox>
+
+                      <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                        <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                          Preference:
+                        </SoftTypography>
+                        <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                          {data?.preference}
+                        </SoftTypography>
+                      </SoftBox>
+
+                      <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                        <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                          Last Seen:
+                        </SoftTypography>
+                        <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                          {data?.lastSeen}
+                        </SoftTypography>
+                      </SoftBox>
+
+                      <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                        <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                          Location:
+                        </SoftTypography>
+                        <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                          {`${data?.location?.type}: ${data?.location?.coordinates?.join(', ')}`}
+                        </SoftTypography>
+                      </SoftBox>
+
+                      {/* Add more key-value pairs as needed */}
                     </SoftBox>
                   </Grid>
 
+
                 </Grid>
+
+                <SoftBox m={1} width='100%'>
+                  <SoftBox m={2} key={index} style={{ justifyContent: 'center', display: 'flex', flexWrap: 'wrap', gap: '1px' }}>
+                    {data.photos && data.photos.length > 0 && data.photos.map((image, index) => (
+                      <SoftBox key={index} flexBasis={{ md: '49%', sm: '100%' }} style={{ maxWidth: '100%' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                          <img
+                            src={`${process.env.REACT_APP_IMG}/${image}`}
+                            alt={`Selected Image ${index}`}
+                            style={{ maxWidth: '200px', maxHeight: '200px', marginBottom: '10px' }}
+                          />
+
+                        </div>
+                      </SoftBox>
+                    ))}
+                  </SoftBox>
+                </SoftBox>
               </Card>
+
+
               <Card
                 sx={{
                   backdropFilter: `saturate(200%) blur(30px)`,
@@ -248,7 +343,7 @@ const index = ({ show, unShow, data, dep }) => {
                     </SoftTypography>
                     <SoftBox height="100%" mt={0.5} lineHeight={1}>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
-                        Launch : {data.openTime}
+                        Lunch : {data.openTime}
                       </SoftTypography>
                     </SoftBox>
                     <SoftTypography variant="button" color="text" fontWeight="medium">
@@ -258,9 +353,109 @@ const index = ({ show, unShow, data, dep }) => {
                 </Grid>
               </Card>
 
+              <Card
+                sx={{
+                  backdropFilter: `saturate(200%) blur(30px)`,
+                  backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+                  boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
+                  position: "relative",
+                  mt: 2,
+                  mx: 3,
+                  py: 2,
+                  px: 2,
+                }}
+              >
+                <Grid item>
+                  <SoftBox height="100%" mt={0.5} lineHeight={1}>
+                    <SoftTypography variant="h5" fontWeight="medium">
+                      UPI ID
+                    </SoftTypography>
+                    <SoftBox height="100%" mt={0.5} lineHeight={1}>
+                      <SoftTypography variant="button" color="text" fontWeight="medium">
+                        Id : {data.upiId}
+                      </SoftTypography>
+                    </SoftBox>
 
+                  </SoftBox>
+                </Grid>
+              </Card>
             </TabPanel>
+
             <TabPanel value={value} index={1} dir={theme.direction}>
+              {data && data.plans.length > 0 ?
+
+                <>
+                  {data.plans.map((elm, i) => (
+                    <SoftBox>
+                      <Card
+                        sx={{
+                          backdropFilter: `saturate(200%) blur(30px)`,
+                          backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+                          boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
+                          position: "relative",
+                          mx: 3,
+                          py: 2,
+                          my: 2,
+                          px: 3
+                        }}
+                      >
+                        <Grid item m={1} width={{ xs: '100%', md: '80%' }} >
+                          <SoftBox height="100%" mt={0.5} lineHeight={1} display="flex" flexDirection="column">
+                            <SoftTypography variant='h3' mb={2}>Plan {i + 1}</SoftTypography>
+                            <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                              <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                                Plane Name:
+                              </SoftTypography>
+                              <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                                {elm?.planName}
+                              </SoftTypography>
+                            </SoftBox>
+                            <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                              <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                                Items:
+                              </SoftTypography>
+                              <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                                {elm?.items}
+                              </SoftTypography>
+                            </SoftBox>
+                            <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                              <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                                Thali Count:
+                              </SoftTypography>
+                              <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                                {elm?.thaliCount}
+                              </SoftTypography>
+                            </SoftBox>
+                            <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                              <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                                Amount:
+                              </SoftTypography>
+                              <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                                {elm?.amount}
+                              </SoftTypography>
+                            </SoftBox>
+                            <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                              <SoftTypography width='40%' variant="h5" fontWeight="medium">
+                                Expiry Date:
+                              </SoftTypography>
+                              <SoftTypography mt={0.5} variant="button" color="text" fontWeight="medium">
+                                {elm?.expiry}
+                              </SoftTypography>
+                            </SoftBox>
+                          </SoftBox>
+                        </Grid>
+                      </Card>
+                    </SoftBox>
+
+                  ))}
+                </>
+
+                : <SoftBox >
+                  <img src={nodata} width='100%' style={{ maxWidth: "300px", marginLeft: 'auto', marginRight: 'auto', display: 'block' }} alt="" />
+                </SoftBox>}
+            </TabPanel>
+
+            <TabPanel value={value} index={2} dir={theme.direction}>
               {profilesListData.length > 0 ?
                 <ProfilesList title="All Shallow Members" profiles={profilesListData} />
                 : <SoftBox >
@@ -269,62 +464,65 @@ const index = ({ show, unShow, data, dep }) => {
               }
             </TabPanel>
 
-            <TabPanel value={value} index={2} dir={theme.direction}>
-              {data && data.plans.length > 0 ?
-                <SoftBox>
-                  <Card
-                    sx={{
-                      backdropFilter: `saturate(200%) blur(30px)`,
-                      backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
-                      boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
-                      position: "relative",
-                      mx: 3,
-                      py: 2,
-                      my: 2,
-                      px: 3
-                    }}
-                  >
-                    {console.log(data.plans, 'elm')}
+            <TabPanel value={value} index={3} dir={theme.direction}>
 
-                    {data.plans.map((elm, i) => (
-                      <SoftBox>
-                        <SoftTypography variant='h3'>Plan {i+1}</SoftTypography>
-                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
-                          <SoftTypography >Plan Name:</SoftTypography>
-                          <SoftTypography ml={1}>{elm.planName}</SoftTypography>
-                        </SoftBox>
-                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
-                          <SoftTypography >Items:</SoftTypography>
-                          <SoftTypography ml={1}>{elm.items}</SoftTypography>
-                        </SoftBox>
-                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
-                          <SoftTypography >Plan Amount:</SoftTypography>
-                          <SoftTypography ml={1}>{elm.amount}</SoftTypography>
-                        </SoftBox>
-                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
-                          <SoftTypography >Plan Expiry:</SoftTypography>
-                          <SoftTypography ml={1}>{elm.expiry}</SoftTypography>
-                        </SoftBox>
-                        <SoftBox m={1} mb={2} display='flex' key={i} style={{ maxWidth: '100%' }}>
-                          <SoftTypography >Thali Count:</SoftTypography>
-                          <SoftTypography ml={1}>{elm.thaliCount}</SoftTypography>
-                        </SoftBox>
+              {reviews.length > 0 ?
+                <>
+                  {reviews.map((elm, i) => (
+                    <SoftBox>
+                      <Card
+                        sx={{
+                          backdropFilter: `saturate(200%) blur(30px)`,
+                          backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+                          boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
+                          position: "relative",
+                          mx: 3,
+                          py: 2,
+                          my: 2,
+                          px: 3
+                        }}
+                      >
+                        <Grid item m={1} width={{ xs: '100%', md: '80%' }} >
+                          <SoftBox height="100%" mt={0.5} lineHeight={1} display="flex" flexDirection="column">
+                            <SoftBox style={{ display: 'flex', marginBottom: '12px' }}>
+                              <SoftTypography width='100%' variant="h5" fontWeight="medium">
+                                "{elm?.comment}"
+                              </SoftTypography>
+                            </SoftBox>
+                            <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                              <SoftTypography mr={0.5} variant="button" fontWeight="medium">
+                                By :
+                              </SoftTypography>
+                              <SoftTypography variant="button" color="text" fontWeight="medium">
+                                {elm?.memberId.name}
+                              </SoftTypography>
+                            </SoftBox>
 
-                      </SoftBox>
+                            <SoftBox style={{ display: 'flex', marginBottom: '8px' }}>
+                              <SoftTypography mr={0.5} variant="button" fontWeight="medium">
+                                Phone :
+                              </SoftTypography>
+                              <SoftTypography variant="button" color="text" fontWeight="medium">
+                                {elm?.memberId.phone}
+                              </SoftTypography>
+                            </SoftBox>
 
-                    ))}
+                          </SoftBox>
+                        </Grid>
+                      </Card>
+                    </SoftBox>
 
-                  </Card>
-
-                </SoftBox>
+                  ))}
+                </>
                 : <SoftBox >
                   <img src={nodata} width='100%' style={{ maxWidth: "300px", marginLeft: 'auto', marginRight: 'auto', display: 'block' }} alt="" />
-                </SoftBox>}
+                </SoftBox>
+              }
             </TabPanel>
           </SwipeableViews>
         </SoftBox>
       </BasicModal>
-    </div>
+    </SoftBox>
   )
 }
 
@@ -333,7 +531,7 @@ function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <SoftBox
       role="tabpanel"
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
@@ -345,7 +543,7 @@ function TabPanel(props) {
           <Typography>{children}</Typography>
         </Box>
       )}
-    </div>
+    </SoftBox>
   );
 }
 
