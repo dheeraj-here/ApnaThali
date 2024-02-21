@@ -6,8 +6,13 @@ import SoftBox from 'components/SoftBox';
 import SoftButton from 'components/SoftButton';
 import { Card } from '@mui/material';
 import toast from 'react-hot-toast';
+import Loading from "components/ApnaLoading";
+
 
 const index = ({ show, unShow, handleRefresh, data }) => {
+
+    const [loading, setLoading] = useState(false);
+
 
     const [values, setValues] = useState({
         link: "",
@@ -18,9 +23,15 @@ const index = ({ show, unShow, handleRefresh, data }) => {
         if (data != null) {
             setValues({
                 link: data.link,
-                image: '',
+                image: data.image,
             })
             console.log(data, '123');
+        }
+        else{
+            setValues({
+                link: '',
+                image: '',
+            })
         }
     }, [data])
 
@@ -28,13 +39,30 @@ const index = ({ show, unShow, handleRefresh, data }) => {
     const token = localStorage.getItem('token');
 
     const handleCreateBanner = () => {
+
         try {
+            setLoading(true);
+
             const { link, image } = values;
-            console.log(values, "1234");
+
+            // Validation checks
+            if (!link || link.trim().length === 0) {
+                toast.error("Link cannot be empty");
+                setLoading(false);
+                return;
+            }
+
+            if (!image || (typeof image === 'object' && image.length === 0)) {
+                toast.error("Please select an image");
+                setLoading(false);
+                return;
+            }
 
             const formData = new FormData();
-            typeof (values.image) == 'object' && formData.append('image', image);
-            formData.append('link', link);
+            if (image && typeof image === 'object') {
+                formData.append('image', image);
+            }
+            formData.append('link', link.trim());
 
             fetch(data == null ? `${process.env.REACT_APP_API}/api/v1/banner` : `${process.env.REACT_APP_API}/api/v1/banner/${id}`, {
                 method: data == null ? "POST" : "PUT",
@@ -52,12 +80,14 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                         console.log(formData, 'formdata');
                         unShow();
                         handleRefresh()
+                        setLoading(false);
                     } else {
                         toast.error(result.message)
                     }
                 })
         } catch (error) {
             toast.error(error.message)
+            setLoading(false);
         }
     }
     const onChange = (e) => {
@@ -99,7 +129,7 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                                 value={values.link}
                             />
                         </SoftBox>
-                        <Uploader name="image" multiple={false} images={values.image} onChange={onChange} />
+                        <Uploader name="image" multiple={false} images={data!=null ? data.image : values.image} onChange={onChange} />
 
                         <SoftButton
                             type="submit"
@@ -107,8 +137,10 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                             color="black"
                             fullWidth
                             onClick={handleCreateBanner}
+                            disabled={loading} // Disable the button if loading is true
+
                         >
-                            {data == null ? 'submit' : 'update'}
+                            {loading ? 'Loading...' : (data == null ? 'Submit' : 'Update')}
                         </SoftButton>
                     </Card>
                 </SoftBox>

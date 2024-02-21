@@ -1,5 +1,5 @@
 import BasicModal from 'components/Modal'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import SoftInput from "components/SoftInput";
 import Uploader from "components/ApnaUploader";
 import SoftBox from 'components/SoftBox';
@@ -9,8 +9,42 @@ import toast from 'react-hot-toast';
 import SoftTypography from 'components/SoftTypography';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
+import { QrReader } from 'react-qr-reader';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import Loading from 'components/ApnaLoading';
 
 const index = ({ show, unShow, handleRefresh, data }) => {
+
+    const [qrScannerActive, setQrScannerActive] = useState(false);
+    const scannerRef = useRef(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleQrScan = (data) => {
+        console.log("Scanning...");
+        if (data) {
+            setValues({ ...values, upiId: data });
+            setQrScannerActive(false); // Disable the QR scanner after successfully scanning a QR code
+        }
+    };
+
+    const [scannerMounted, setScannerMounted] = useState(false);
+
+    const handleClickOutsideScanner = (e) => {
+        if (scannerRef.current && !scannerRef.current.contains(e.target)) {
+            setQrScannerActive(false);
+        }
+    };
+
+    useEffect(() => {
+        if (qrScannerActive) {
+            setScannerMounted(true);
+            document.addEventListener('click', handleClickOutsideScanner);
+        } else {
+            setScannerMounted(false);
+            document.removeEventListener('click', handleClickOutsideScanner);
+        }
+    }, [qrScannerActive]);
+
 
     const [location, setLocation] = useState(null);
     const [fetched, setFetched] = useState('Get Current Location')
@@ -69,27 +103,18 @@ const index = ({ show, unShow, handleRefresh, data }) => {
     const [selectedImages, setSelectedImages] = useState([]);
 
     const handleFileChange = (event) => {
+
         const selectedFiles = event.target.files;
         const newImages = Array.from(selectedFiles);
         setSelectedImages([...selectedImages, ...newImages]);
     };
+
 
     const handleRemoveImage = (index) => {
         const updatedImages = [...selectedImages];
         updatedImages.splice(index, 1);
         setSelectedImages(updatedImages);
     }
-    // const addPlan = () => {
-    //     const newPlan = {
-    //         name: '',
-    //         thaliName: '',
-    //         items: '',
-    //         price: '',
-    //     };
-
-    //     // Create a new array by spreading the existing plans and adding the new plan
-    //     setPlans(prevPlans => [...prevPlans, newPlan]);
-    // }
 
     useEffect(() => {
         setValues({
@@ -116,6 +141,9 @@ const index = ({ show, unShow, handleRefresh, data }) => {
 
     const handleCreateExpense = async () => {
         try {
+            // handleGetLocation();
+            setLoading(true);
+
             const { name, description, phone, sunday, sundaySpecial, launch, dinner, logo, prefVal, type, upiId, email, ownerName } = values;
             {
                 plans.map((elm, i) => {
@@ -191,13 +219,17 @@ const index = ({ show, unShow, handleRefresh, data }) => {
             } else {
                 toast.error("Can't create shop!")
             }
+            setLoading(false);
+
         } catch (error) {
             toast.error("Shop did not created!");
             console.log(error);
+            setLoading(false);
         }
     }
     const onChange = (e) => {
         const name = e.target.name;
+
         if (e.target.files) {
             if (e.target.files?.length > 1) {
                 setValues({ ...values, [name]: [...e.target.files] });
@@ -208,6 +240,7 @@ const index = ({ show, unShow, handleRefresh, data }) => {
             const value = e.target.value;
             setValues({ ...values, [name]: value });
         }
+
     };
 
     const addPlan = () => {
@@ -221,16 +254,10 @@ const index = ({ show, unShow, handleRefresh, data }) => {
             thaliCount: ''
         };
 
-        // Update the plans state with the new plan
         setPlans([...plans, newPlan]);
     }
 
     const onChangePlan = (index, field, value) => {
-        // console.log(index, value.target.value, '123456');
-        // const newInputFields = [...inputFields];
-        // newInputFields[index][field] = value.target.value;
-        // setPlans(newInputFields);
-
         setPlans((prevPlans) => {
             const newPlans = [...prevPlans];
             newPlans[index][field] = value.target.value;
@@ -240,7 +267,6 @@ const index = ({ show, unShow, handleRefresh, data }) => {
 
     const removePlan = (ind, value) => {
         if (plans.length === 1) {
-            // Ensure there is always at least one phone box
             return;
         }
         const newInputFields = [...plans];
@@ -403,7 +429,6 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                                 <SoftButton onClick={handleGetLocation}>{fetched} {location ? '✅' : ''}</SoftButton>
                             </SoftBox>
                         </SoftBox>
-
                     </Card>
 
                     <SoftTypography mt={4} ml={3} variant="h3">Personal Details</SoftTypography>
@@ -435,6 +460,16 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                                     placeholder="Enter Phone Number"
                                     onChange={onChange}
                                     value={values.phone}
+                                    onKeyDown={(e) => {
+                                        // Allow only numeric input
+                                        if (!/^\d+$/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete") {
+                                            e.preventDefault();
+                                        }
+                                    }}
+                                    inputProps={{
+                                        maxLength: 10,
+                                        type: "tel",  // Allow only digits, minimum 0 and maximum 10
+                                    }}
                                 />
                             </SoftBox>
                             <SoftBox m={1} flexBasis={{ md: '47%', sm: '80%' }} style={{ maxWidth: '100%' }}>
@@ -445,14 +480,30 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                                     value={values.email}
                                 />
                             </SoftBox>
-                            <SoftBox m={1} flexBasis={{ md: '47%', sm: '80%' }} style={{ maxWidth: '100%' }}>
-                                <SoftInput
-                                    name="upiId"
-                                    placeholder="Enter UPI id"
-                                    onChange={onChange}
-                                    value={values.upiId}
-                                />
+                            <SoftBox m={1} flexBasis={{ md: '47%', sm: '80%' }} style={{ maxWidth: '90%' }} ref={scannerRef}>
+                                {qrScannerActive && scannerMounted ? (
+                                    <QrReader
+                                        delay={300}
+                                        onError={(error) => console.error(error)}
+                                        onScan={handleQrScan}
+                                        style={{ width: '100%' }}
+                                        onClick={(e) => e.stopPropagation()} // Add this line
+                                    />
+                                ) : (
+                                    <SoftBox style={{ justifyContent: 'center', display: 'flex', flexWrap: 'wrap', gap: '1px' }}>
+                                        <SoftBox flexBasis='85%'>
+                                            <SoftInput
+                                                name="upiId"
+                                                placeholder="Enter UPI id"
+                                                onChange={onChange}
+                                                value={values.upiId}
+                                            />
+                                        </SoftBox>
+                                        <SoftBox style={{ cursor: 'pointer' }} mt={1} ml={1} flexBasis='8%' onClick={() => setQrScannerActive(true)}><QrCodeScannerIcon /></SoftBox>
+                                    </SoftBox>
+                                )}
                             </SoftBox>
+
                         </SoftBox>
                     </Card>
 
@@ -514,12 +565,14 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                     <SoftBox mt={2}>
                         <SoftTypography mt={2} ml={1} variant="h5">Select Photos</SoftTypography>
 
-                        <SoftInput
+                        <input
                             type="file"
                             name="photo"
                             multiple
                             onChange={handleFileChange}
+                            accept="image/*"
                         />
+
                         <SoftBox m={2} key={index} style={{ justifyContent: 'center', display: 'flex', flexWrap: 'wrap', gap: '1px' }}>
                             {selectedImages.map((image, index) => (
                                 <SoftBox key={index} flexBasis={{ md: '49%', sm: '100%' }} style={{ maxWidth: '100%' }}>
@@ -551,8 +604,9 @@ const index = ({ show, unShow, handleRefresh, data }) => {
                         color="black"
                         fullWidth
                         onClick={handleCreateExpense}
+                        disabled={loading}
                     >
-                        {data == null ? 'submit' : 'update'}
+                        {loading ? 'Loading...' : (data == null ? 'Submit' : 'Update')}
                     </SoftButton>
                 </SoftBox>
             </BasicModal>

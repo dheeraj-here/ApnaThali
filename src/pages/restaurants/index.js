@@ -46,7 +46,7 @@ function Tables() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    getRestro(page);
+    getRestro(page, search);
   };
 
   const handleShowForm = (e) => {
@@ -55,12 +55,9 @@ function Tables() {
     setShopId(e)
   };
 
-  const showReview = (e, elm) => {
-    // console.log(e, elm._id);
-  }
 
-  const handleActive = async (e, elm) => {
-    console.log("Live status changed ", e, elm.isLive);
+  const handleActive = async (elm) => {
+    console.log("Live status changed ", elm.isLive);
 
     let currentStatus = elm.isLive;
     const formData = new FormData();
@@ -70,8 +67,6 @@ function Tables() {
         method: "PUT",
         headers: {
           Accept: "application/json",
-          // 'Content-Type': 'application/json',
-          // 'Access-Control-Allow-Origin': '*',
           Authorization: token
         },
         body: formData,
@@ -81,7 +76,6 @@ function Tables() {
       const result = await res.json();
 
       if (result.success) {
-        // console.log(result, currentStatus + ' to ' + !currentStatus);
         toast.success(result.message);
         handleRefresh();
       } else {
@@ -92,26 +86,6 @@ function Tables() {
       console.log(error);
     }
   }
-  // const handlePageChange = (newPage) => {
-  //   console.log(newPage);
-  //   setCurrentPage(newPage);
-  // };
-
-
-  // const totalPages = Math.ceil(result?.data.length / itemsPerPage);
-
-
-  // const renderPaginationControls = () => (
-  //   <SoftBox>
-  //     <SoftButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-  //       <ArrowBackIosNewOutlinedIcon />
-  //     </SoftButton>
-  //     <span>{currentPage}</span>
-  //     <SoftButton onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-  //       <ArrowForwardIosOutlinedIcon />
-  //     </SoftButton>
-  //   </SoftBox>
-  // );
 
 
   const handleViewCustomer = async (e) => {
@@ -129,13 +103,10 @@ function Tables() {
         throw new Error(`HTTP error! Status: ${res.status}`)
       }
       const result = await res.json();
-      // console.log(result, "eryhg");
-
       if (result.success) {
         setCustomerId(result.data);
 
         console.log(result.data, 'got res data');
-        // setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -174,7 +145,7 @@ function Tables() {
   const downloadQR = async (e) => {
     console.log("Download", e);
     try {
-      // setLoading(true);
+      setLoading(true);
       const res = await fetch(`${process.env.REACT_APP_APE}/api/v1/get/Restaurant/qrCode/${e}`, {
         method: "GET",
         redirect: "follow",
@@ -186,13 +157,10 @@ function Tables() {
         throw new Error(`HTTP error! Status: ${res.status}`)
       }
       const result = await res.json();
-      // console.log(result, "eryhg");
 
       if (result.success) {
         console.log(result, "THis is result");
         const url = `${process.env.REACT_APP_APE}/${result?.data.pdf}`;
-        // console.log(url);
-        // console.log(url);
         window.open(url, "_blank");
         setLoading(false);
       }
@@ -202,10 +170,10 @@ function Tables() {
     }
   }
 
-  const getRestro = (ev) => {
+  const getRestro = (ev, se) => {
     try {
       setLoading(true);
-      fetch(`https://devserver.apnathali.com/api/v1/get/admin/Restaurant/${id}?page=${ev}`, {
+      fetch(`${process.env.REACT_APP_API}/api/v1/get/admin/Restaurant/${id}?search=${se}&page=${ev}`, {
         method: "GET",
         headers: {
           Authorization: token
@@ -222,7 +190,6 @@ function Tables() {
             }));
             setCounts(result.counts);
             setLoading(false)
-            //  console.log(result?.data, "This is our data for row/col");
           }
         })
 
@@ -233,7 +200,7 @@ function Tables() {
 
   useEffect(() => {
     if (location.pathname == '/restaurants') {
-      getRestro(currentPage);
+      getRestro(currentPage, search);
     }
   }, [refresh, search])
 
@@ -245,45 +212,7 @@ function Tables() {
       <ViewCustomer show={showCustomer} unShow={setshowCustomer} data={customerId} reviews={reviews} />
       <SoftBox py={3}>
         <SoftBox mb={3}>
-          {/* <SoftBox mb={3}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={6} xl={3}>
-                <MiniStatisticsCard
-                  title={{ text: "today's money" }}
-                  count="$53,000"
-                  percentage={{ color: "success", text: "+55%" }}
-                  icon={{ color: "info", component: "paid" }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} xl={3}>
-                <MiniStatisticsCard
-                  title={{ text: "today's users" }}
-                  count="2,300"
-                  percentage={{ color: "success", text: "+3%" }}
-                  icon={{ color: "info", component: "public" }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} xl={3}>
-                <MiniStatisticsCard
-                  title={{ text: "new clients" }}
-                  count="+3,462"
-                  percentage={{ color: "error", text: "-2%" }}
-                  icon={{ color: "info", component: "emoji_events" }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} xl={3}>
-                <MiniStatisticsCard
-                  title={{ text: "sales" }}
-                  count="$103,430"
-                  percentage={{ color: "success", text: "+5%" }}
-                  icon={{
-                    color: "info",
-                    component: "shopping_cart",
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </SoftBox> */}
+          
           <Card>
             <SoftButton
               size="small"

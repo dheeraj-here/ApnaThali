@@ -35,7 +35,7 @@ const index = ({ show, unShow, data, reviews }) => {
   const [profilesListData, setProfilesListData] = useState([]);
   const [attendListData, setAttendListData] = useState([]);
   const [plan, setPlan] = useState([]);
-console.log(data, "Data get");
+  console.log(data, "Data get");
   const [time, setTime] = useState('')
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -152,44 +152,7 @@ console.log(data, "Data get");
           >
             <TabPanel value={value} index={0} dir={theme.direction}>
 
-              <Card
-                sx={{
-                  backdropFilter: `saturate(200%) blur(30px)`,
-                  backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
-                  boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
-                  position: "relative",
-                  // mt: 2,
-                  // mx: 3,
-                  py: 2,
-                  px: 2,
-                }}
-              >
 
-                <Grid container spacing={3} alignItems="center">
-                  <Grid item>
-                    <SoftAvatar
-                      src={data?.logo ? `${process.env.REACT_APP_IMG}/${data?.logo}` : avatar}
-                      alt="profile-image"
-                      variant="rounded"
-                      size="xl"
-                      shadow="sm"
-                    />
-                  </Grid>
-                  <Grid item>
-                    <SoftBox height="100%" mt={0.5} lineHeight={1}>
-                      <SoftTypography variant="h5" fontWeight="medium" width="200px">
-                        {data?.fullName} - {data?.id}
-                      </SoftTypography>
-                      <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data?.email}
-                      </SoftTypography><br></br>
-                      <SoftTypography variant="button" color="text" fontWeight="medium">
-                        {data?.contact}
-                      </SoftTypography><br></br>
-                    </SoftBox>
-                  </Grid>
-                </Grid>
-              </Card>
               <Card
                 sx={{
                   backdropFilter: `saturate(200%) blur(30px)`,
@@ -246,9 +209,31 @@ console.log(data, "Data get");
               >
 
                 <Grid container spacing={1} width='100%' alignItems="center">
-                  <SoftTypography ml={1} width='40%' variant="h3" fontWeight="medium">
+                  <SoftTypography mb={1} ml={1} width='100%' variant="h3" fontWeight="medium">
                     Details
                   </SoftTypography>
+                  <SoftBox width='100%' ml={2} style={{ display: 'flex', marginBottom: '8px' }}>
+                    <SoftAvatar
+                      src={data?.logo ? `${process.env.REACT_APP_IMG}/${data?.logo}` : avatar}
+                      alt="profile-image"
+                      variant="rounded"
+                      size="xl"
+                      shadow="sm"
+                    />
+                    <SoftBox height="100%" mt={0.5} lineHeight={1} style={{ marginLeft: '16px' }}>
+                      <SoftTypography variant="h5" fontWeight="medium" width="200px">
+                        {data?.fullName} - {data?.id}
+                      </SoftTypography>
+                      <SoftTypography variant="button" color="text" fontWeight="medium">
+                        {data?.email}
+                      </SoftTypography>
+                      <br />
+                      <SoftTypography variant="button" color="text" fontWeight="medium">
+                        {data?.contact}
+                      </SoftTypography>
+                    </SoftBox>
+                  </SoftBox>
+
                   <Grid item m={1} width={{ xs: '100%', md: '60%' }} >
                     <SoftBox height="100%" mt={0.5} lineHeight={1} display="flex" flexDirection="column">
 
@@ -343,11 +328,11 @@ console.log(data, "Data get");
                     </SoftTypography>
                     <SoftBox height="100%" mt={0.5} lineHeight={1}>
                       <SoftTypography variant="button" color="text" fontWeight="medium">
-                        Lunch : {data.openTime}
+                        Lunch : {data.openTime ? data.openTime : data.launch}
                       </SoftTypography>
                     </SoftBox>
                     <SoftTypography variant="button" color="text" fontWeight="medium">
-                      Dinner : {data.closeTime}
+                      Dinner : {data.closeTime ? data.closeTime : data.dinner}
                     </SoftTypography>
                   </SoftBox>
                 </Grid>

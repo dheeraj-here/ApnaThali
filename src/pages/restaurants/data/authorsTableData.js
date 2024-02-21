@@ -8,6 +8,7 @@ import Icon from "@mui/material/Icon";
 import avatar from "assets/images/cust-avatar.jpg"
 import SoftButton from "components/SoftButton";
 import Switch from '@mui/material/Switch';
+import { useState } from "react";
 
 
 export function CustomerData({ data, view, downloadQR, handleActive }) {
@@ -23,6 +24,19 @@ export function CustomerData({ data, view, downloadQR, handleActive }) {
     ],
 
     rows: [],
+  };
+
+  const handleSwitchChange = (el, id, isChecked) => {
+    const updatedData = data.map(elm => {
+      if (elm._id === id) {
+        // Update the isLive state of the corresponding element
+        return { ...elm, isLive: !isChecked };
+      }
+      return elm;
+    });
+
+    // Pass the updated data to the parent component
+    handleActive(el);
   };
 
   data && data.length > 0 && data.map((elm, i) => {
@@ -51,13 +65,10 @@ export function CustomerData({ data, view, downloadQR, handleActive }) {
           <SoftTypography variant="caption" fontWeight="medium" color="text">
             {`phone : ${elm?.contact}`}
           </SoftTypography>
-          {/* <SoftTypography variant="caption" color="secondary" width="120px">
-            restaurant: {elm?.upiId}
-          </SoftTypography> */}
         </SoftBox>
       ),
       status: (
-        <Switch checked={elm.isLive} onChange={(e) => handleActive(e, elm)} />
+        <Switch checked={elm.isLive} onChange={(e) => handleSwitchChange(elm, elm._id, e.target.checked)} />
       ),
       action: (
         <Icon fontSize="small" color="inherit" style={{ cursor: 'pointer' }} onClick={() => view(elm._id)}>

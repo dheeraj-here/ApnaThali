@@ -10,13 +10,15 @@ import toast from 'react-hot-toast';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Dashboard from "layouts/dashboard";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import Loading from 'components/ApnaLoading';
+
 
 const index = () => {
 
     const [refresh, setRefresh] = useState(0);
     const options = ['users', 'members', 'all']
     const op = ['PUSH', 'APP', 'BOTH']
-    // const [selectedValue, setSelectedValue] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const handleRefresh = () => setRefresh(refresh + 1);
     const [values, setValues] = useState({
@@ -60,6 +62,7 @@ const index = () => {
 
     const send = () => {
         try {
+            setLoading(true);
             console.log('send starts');
             const { title, description, link, icon, selectedValue, op } = values;
 
@@ -86,12 +89,16 @@ const index = () => {
                         toast.success("Message sent successfully!");
                         console.log(title, selectedValue, icon, description, "qwerty");
                         handleRefresh()
+                        setLoading(false);
+
                     } else {
                         toast.error("Message not sent!")
+                        setLoading(false);
                     }
                 })
         } catch (error) {
             toast.error(error.message)
+            setLoading(false)
         }
     }
     const onChange = (e) => {
@@ -120,9 +127,18 @@ const index = () => {
         });
     }, [refresh])
 
+    function handleFileSelect(event) {
+        const files = event.target.files;
+    
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          // Do something with each selected file (e.g., display preview, upload to server, etc.).
+          console.log('Selected file:', file);
+        }
+      }
+
     return (
         <div>
-
             <DashboardLayout>
                 <DashboardNavbar />
                 <SoftBox mt={2} >
@@ -216,6 +232,10 @@ const index = () => {
                                     ))}
                                 </select>
                             </SoftBox>
+                            <SoftBox>
+                            <input type="file" accept="image/*" multiple onChange="handleFileSelect(event)">
+</input>
+                            </SoftBox>
                         </SoftBox>
                         <SoftButton
                             type="submit"
@@ -223,8 +243,9 @@ const index = () => {
                             color="black"
                             fullWidth
                             onClick={send}
+                            disabled={loading} // Disable the button if loading is true
                         >
-                            send
+                            {loading ? <Loading /> : 'Send'}
                         </SoftButton>
                     </Card>
                 </SoftBox>
